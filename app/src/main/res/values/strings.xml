@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Valetudo Companion</string>
+    <string name="discovering_valetudo_instances">Discovering Valetudo instances on your network…</string>
+    <string name="found_devices">Found devices (tap to open)</string>
+</resources>
