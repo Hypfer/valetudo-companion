@@ -11,3 +11,6 @@ Note that this app is completely optional and only exists to make Valetudo more 
 
 This app will not provide any UI to interface with Valetudo during normal operation.
 Basically, you can think of it as an automatically updating bookmark + some wizard stuff.
+
+[<img src="https://github.com/Hypfer/valetudo-companion/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-01.png" width=250>](https://github.com/Hypfer/valetudo-companion/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-01.png)
+[<img src="https://github.com/Hypfer/valetudo-companion/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-02.png" width=250>](https://github.com/Hypfer/valetudo-companion/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot-02.png)
