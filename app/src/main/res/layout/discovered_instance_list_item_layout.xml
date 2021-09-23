@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/manufacturerAndModel"
+        android:layout_width="380dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="manufacturerAndModel" />
+
+    <TextView
+        android:id="@+id/valetudoVersion"
+        android:layout_width="180dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
+        tools:text="valetudoVersion" />
+
+    <TextView
+        android:id="@+id/uniqueIdentifier"
+        android:layout_width="195dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/valetudoVersion"
+        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
+        tools:text="uniqueIdentifier" />
+
+    <TextView
+        android:id="@+id/domainAndHost"
+        android:layout_width="380dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="bottom"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/valetudoVersion"
+        tools:text="domainAndHost" />
+
+    <Space
+        android:layout_width="380dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/domainAndHost" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,4 +2,8 @@
     <string name="app_name">Valetudo Companion</string>
     <string name="discovering_valetudo_instances">Discovering Valetudo instances on your network…</string>
     <string name="found_devices">Found devices (tap to open)</string>
+    <string name="discovered_valetudo_instance_list_item_manufacturer_and_model" translatable="false">%s %s</string>
+    <string name="discovered_valetudo_instance_list_item_valetudo_version" translatable="false">Valetudo %s</string>
+    <string name="discovered_valetudo_instance_list_item_domain_and_host" translatable="false">valetudo_%s.local (%s)</string>
+    <string name="valetudo_logo_content_description">Valetudo Logo</string>
 </resources>

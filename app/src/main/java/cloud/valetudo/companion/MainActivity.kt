@@ -12,27 +12,16 @@ import android.net.Uri
 import android.view.View
 import android.widget.*
 import java.util.concurrent.Semaphore
-import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 
 
-data class ValetudoInstance (
-    val id: String,
-    val model: String,
-    val manufacturer: String,
-    val valetudoVersion: String,
-    val host: String,
-    val serviceName: String
-) {
-    override fun toString(): String = "$manufacturer $model ($host)"
-}
 
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "cloud.valetudo"
 
     private var mNsdManager : NsdManager? = null
-    private var mValetudoInstances = ArrayList<ValetudoInstance>()
+    private var mValetudoInstances = ArrayList<DiscoveredValetudoInstance>()
     private val resolveSemaphore = Semaphore(1)
 
 
@@ -43,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val mainText = findViewById<TextView>(R.id.main_text)
         val listLayout = findViewById<LinearLayout>(R.id.list_layout)
 
-        val itemsAdapter = ArrayAdapter(this, R.layout.list_item_layout, mValetudoInstances)
+        val itemsAdapter = DiscoveredValetudoInstancesAdapter(this, R.layout.discovered_instance_list_item_layout, mValetudoInstances)
 
         val discoveredList = findViewById<ListView>(R.id.discovered_list)
         discoveredList.adapter = itemsAdapter
@@ -56,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        fun addDiscoveredDevice(newInstance: ValetudoInstance) {
-            val oldInstance: ValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
+        fun addDiscoveredDevice(newInstance: DiscoveredValetudoInstance) {
+            val oldInstance: DiscoveredValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
             var idx: Int = -1
 
             if (oldInstance != null) {
@@ -106,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
 
                         if(id != null) {
-                            addDiscoveredDevice(ValetudoInstance(
+                            addDiscoveredDevice(DiscoveredValetudoInstance(
                                 String(id),
                                 model,
                                 manufacturer,
