@@ -16,13 +16,23 @@ import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 
 
+data class ValetudoInstance (
+    val id: String,
+    val model: String,
+    val manufacturer: String,
+    val valetudoVersion: String,
+    val host: String,
+    val serviceName: String
+) {
+    override fun toString(): String = "$manufacturer $model ($host)"
+}
+
+
 class MainActivity : AppCompatActivity() {
     private val TAG = "cloud.valetudo"
 
     private var mNsdManager : NsdManager? = null
-
-    private var mValetudoDevices = HashMap<String, String>()
-    private var mValetudoDeviceDescriptions = ArrayList<String>()
+    private var mValetudoInstances = ArrayList<ValetudoInstance>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,32 +42,48 @@ class MainActivity : AppCompatActivity() {
         val mainText = findViewById<TextView>(R.id.main_text)
         val listLayout = findViewById<LinearLayout>(R.id.list_layout)
 
-        val itemsAdapter = ArrayAdapter(this, R.layout.list_item_layout, mValetudoDeviceDescriptions)
+        val itemsAdapter = ArrayAdapter(this, R.layout.list_item_layout, mValetudoInstances)
+
         val discoveredList = findViewById<ListView>(R.id.discovered_list)
         discoveredList.adapter = itemsAdapter
+
         discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${mValetudoDevices[mValetudoDeviceDescriptions[position]]}"))
+            val instance = mValetudoInstances[position]
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${instance.host}"))
 
             startActivity(browserIntent)
         }
 
-        fun addDiscoveredDevice(deviceDescription: String, hostAddress: String ) {
-            runOnUiThread {
-                mValetudoDevices[deviceDescription] = hostAddress
-                mValetudoDeviceDescriptions.add(deviceDescription)
 
-                itemsAdapter.notifyDataSetChanged();
+
+        fun addDiscoveredDevice(newInstance: ValetudoInstance) {
+            val oldInstance: ValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
+            var idx: Int = -1
+
+            if (oldInstance != null) {
+                idx = mValetudoInstances.indexOf(oldInstance)
+            }
+
+            runOnUiThread {
+                if (idx > -1) {
+                    mValetudoInstances[idx] = newInstance
+                } else {
+                    mValetudoInstances.add(newInstance)
+                }
+
+                itemsAdapter.notifyDataSetChanged()
             }
         }
 
         val resolveSemaphore = Semaphore(1)
+
         fun tryResolve(serviceInfo: NsdServiceInfo) {
             thread {
                 resolveSemaphore.acquire()
 
                 mNsdManager!!.resolveService(serviceInfo, object : NsdManager.ResolveListener {
                     override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
-                        resolveSemaphore.release();
+                        resolveSemaphore.release()
 
                         Log.d(TAG, "Service resolve failed $serviceInfo Error Code: $errorCode")
                     }
@@ -72,19 +98,26 @@ class MainActivity : AppCompatActivity() {
 
                         Log.d(TAG, "Service resolve success $serviceInfo")
 
-                        var deviceLabel = serviceInfo!!.serviceName
+                        val serviceName = serviceInfo!!.serviceName ?: ""
+                        val id = serviceInfo.attributes.get("id")
 
-                        val vendor = serviceInfo.attributes.get("manufacturer");
-                        val model = serviceInfo.attributes.get("model");
+                        val manufacturer = String(serviceInfo.attributes.get("manufacturer")?: byteArrayOf())
+                        val model = String(serviceInfo.attributes.get("model") ?: byteArrayOf())
+                        val version = String(serviceInfo.attributes.get("version") ?: byteArrayOf())
+                        val hostAddress = serviceInfo.host.hostAddress
 
-                        if(vendor != null && model != null) {
-                            deviceLabel = "${String(vendor)} ${String(model)}"
+
+                        if(id != null) {
+                            addDiscoveredDevice(ValetudoInstance(
+                                String(id),
+                                model,
+                                manufacturer,
+                                version,
+                                hostAddress,
+                                serviceName
+                            ))
                         }
 
-
-                        val deviceDescription = "$deviceLabel (${serviceInfo.host.hostAddress})"
-
-                        addDiscoveredDevice(deviceDescription, serviceInfo.host.hostAddress);
                     }
                 })
             }
@@ -108,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "Service discovery success $serviceInfo")
 
                 if (serviceInfo != null) {
-                    tryResolve(serviceInfo);
+                    tryResolve(serviceInfo)
                 } else {
                     Log.d(TAG, "ServiceInfo is null")
                 }
@@ -117,6 +150,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onServiceLost(serviceInfo: NsdServiceInfo?) {
                 Log.d(TAG, "Service lost $serviceInfo")
+                /*
+                    It shall be noted that this is useless because there's no way to find out
+                    which service the serviceInfo belongs to since there's no unique ID or similar
+
+                    Because of that, we'll just keep results indefinitely and check if they already
+                    exist on adding a new one in which case we'll replace the old one based on
+                    the unique system ID provided by Valetudo in the id TXT record
+                 */
             }
         })
     }
