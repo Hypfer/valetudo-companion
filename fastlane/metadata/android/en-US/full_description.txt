@@ -1,0 +1,2 @@
+Valetudo Companion uses Bonjour/Zeroconf to find robot vacuums running Valetudo version 2021.08.0 and up.
+It displays each found vacuum in a list and lets you open the control panel in your browser with a single tap.
