@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private var mNsdManager : NsdManager? = null
     private var mValetudoInstances = ArrayList<ValetudoInstance>()
+    private val resolveSemaphore = Semaphore(1)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         fun addDiscoveredDevice(newInstance: ValetudoInstance) {
             val oldInstance: ValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
             var idx: Int = -1
@@ -74,8 +74,6 @@ class MainActivity : AppCompatActivity() {
                 itemsAdapter.notifyDataSetChanged()
             }
         }
-
-        val resolveSemaphore = Semaphore(1)
 
         fun tryResolve(serviceInfo: NsdServiceInfo) {
             thread {
@@ -127,15 +125,21 @@ class MainActivity : AppCompatActivity() {
         mNsdManager = (getSystemService(Context.NSD_SERVICE) as NsdManager)
 
         mNsdManager!!.discoverServices("_valetudo._tcp.", NsdManager.PROTOCOL_DNS_SD, object : NsdManager.DiscoveryListener {
-            override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {}
+            override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {
+                Log.d(TAG, "Start service discovery failed with error code $errorCode")
+            }
 
-            override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {}
+            override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {
+                Log.d(TAG, "Stop service discovery failed with error code $errorCode")
+            }
 
             override fun onDiscoveryStarted(serviceType: String?) {
                 Log.d(TAG, "Service discovery started")
             }
 
-            override fun onDiscoveryStopped(serviceType: String?) {}
+            override fun onDiscoveryStopped(serviceType: String?) {
+                Log.d(TAG, "Service discovery stopped successfully")
+            }
 
             override fun onServiceFound(serviceInfo: NsdServiceInfo?) {
                 Log.d(TAG, "Service discovery success $serviceInfo")
