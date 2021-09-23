@@ -41,6 +41,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(browserIntent)
         }
 
+        fun addDiscoveredDevice(deviceDescription: String, hostAddress: String ) {
+            runOnUiThread {
+                mValetudoDevices[deviceDescription] = hostAddress
+                mValetudoDeviceDescriptions.add(deviceDescription)
+
+                itemsAdapter.notifyDataSetChanged();
+            }
+        }
+
         val resolveSemaphore = Semaphore(1)
         fun tryResolve(serviceInfo: NsdServiceInfo) {
             thread {
@@ -74,8 +83,8 @@ class MainActivity : AppCompatActivity() {
 
 
                         val deviceDescription = "$deviceLabel (${serviceInfo.host.hostAddress})"
-                        mValetudoDevices[deviceDescription] = serviceInfo.host.hostAddress
-                        mValetudoDeviceDescriptions.add(deviceDescription)
+
+                        addDiscoveredDevice(deviceDescription, serviceInfo.host.hostAddress);
                     }
                 })
             }
