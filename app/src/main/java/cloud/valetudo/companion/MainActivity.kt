@@ -11,6 +11,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import android.widget.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.thread
 
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val mainText = findViewById<TextView>(R.id.main_text)
+        val helpText = findViewById<TextView>(R.id.help_text)
+        val provisionButton = findViewById<FloatingActionButton>(R.id.enterProvisioningActivityButton)
         val listLayout = findViewById<LinearLayout>(R.id.list_layout)
 
         val itemsAdapter = DiscoveredValetudoInstancesAdapter(this, R.layout.discovered_instance_list_item_layout, mValetudoInstances)
@@ -44,6 +47,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(browserIntent)
         }
 
+        provisionButton.setOnClickListener {
+            val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
+
+            startActivity(provisioningIntent)
+        }
 
         fun addDiscoveredDevice(newInstance: DiscoveredValetudoInstance) {
             val oldInstance: DiscoveredValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
@@ -79,7 +87,8 @@ class MainActivity : AppCompatActivity() {
                         resolveSemaphore.release()
 
                         runOnUiThread {
-                            mainText.visibility = View.GONE
+                            mainText.text = resources.getString(R.string.found_devices)
+                            helpText.visibility = View.GONE
                             listLayout.visibility = View.VISIBLE
                         }
 
