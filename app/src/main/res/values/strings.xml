@@ -2,8 +2,30 @@
     <string name="app_name">Valetudo Companion</string>
     <string name="discovering_valetudo_instances">Discovering Valetudo instances on your network…</string>
     <string name="found_devices">Found devices (tap to open)</string>
+    <string name="provision_new">Provision new Valetudo Instance</string>
     <string name="discovered_valetudo_instance_list_item_manufacturer_and_model" translatable="false">%s %s</string>
     <string name="discovered_valetudo_instance_list_item_valetudo_version" translatable="false">Valetudo %s</string>
     <string name="discovered_valetudo_instance_list_item_domain_and_host" translatable="false">valetudo_%s.local (%s)</string>
     <string name="valetudo_logo_content_description">Valetudo Logo</string>
+
+    <string name="discovering_help">
+        Troubleshooting:
+        \n
+        \n- Are you connected to your Wi-Fi?
+        \n- Are you running Valetudo 2021.07.0 or newer?
+        \n- Are you connected to a VPN?
+        \n- Does your network setup block/filter mDNS/Bonjour?
+    </string>
+
+    <string name="provisioning_help">
+        You need to manually connect your phone to the Wi-Fi Access Point of your robot for the scan button to work.
+    </string>
+    <string name="provisioning_initial">-</string>
+    <string name="provisioning_no_valetudo">No Valetudo found</string>
+    <string name="provisioning_found_valetudo" translatable="false">%s %s</string>
+    <string name="provisioning_found_hint">Found unprovisioned robot:</string>
+    <string name="connect">Connect</string>
+    <string name="password">Password</string>
+    <string name="ssid">SSID</string>
+    <string name="scan">Scan</string>
 </resources>
