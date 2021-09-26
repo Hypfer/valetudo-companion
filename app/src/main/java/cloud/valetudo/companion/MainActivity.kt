@@ -17,9 +17,8 @@ import kotlin.concurrent.thread
 
 
 
-
 class MainActivity : AppCompatActivity() {
-    private val TAG = "cloud.valetudo"
+    private val logTag = "cloud.valetudo"
 
     private var mNsdManager : NsdManager? = null
     private var mValetudoInstances = ArrayList<DiscoveredValetudoInstance>()
@@ -29,6 +28,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val icon = findViewById<ImageView>(R.id.valetudo_logo)
+        var iconClicks = 0
+
+        icon.setOnClickListener {
+            if (iconClicks == 9) {
+                icon.setImageResource(R.drawable.ic_valetudog)
+            } else {
+                iconClicks++
+            }
+        }
 
         val mainText = findViewById<TextView>(R.id.main_text)
         val helpText = findViewById<TextView>(R.id.help_text)
@@ -80,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
                         resolveSemaphore.release()
 
-                        Log.d(TAG, "Service resolve failed $serviceInfo Error Code: $errorCode")
+                        Log.d(logTag, "Service resolve failed $serviceInfo Error Code: $errorCode")
                     }
 
                     override fun onServiceResolved(serviceInfo: NsdServiceInfo?) {
@@ -92,14 +102,14 @@ class MainActivity : AppCompatActivity() {
                             listLayout.visibility = View.VISIBLE
                         }
 
-                        Log.d(TAG, "Service resolve success $serviceInfo")
+                        Log.d(logTag, "Service resolve success $serviceInfo")
 
                         val serviceName = serviceInfo!!.serviceName ?: ""
-                        val id = serviceInfo.attributes.get("id")
+                        val id = serviceInfo.attributes["id"]
 
-                        val manufacturer = String(serviceInfo.attributes.get("manufacturer")?: byteArrayOf())
-                        val model = String(serviceInfo.attributes.get("model") ?: byteArrayOf())
-                        val version = String(serviceInfo.attributes.get("version") ?: byteArrayOf())
+                        val manufacturer = String(serviceInfo.attributes["manufacturer"] ?: byteArrayOf())
+                        val model = String(serviceInfo.attributes["model"] ?: byteArrayOf())
+                        val version = String(serviceInfo.attributes["version"] ?: byteArrayOf())
                         val hostAddress = serviceInfo.host.hostAddress
 
 
@@ -124,34 +134,34 @@ class MainActivity : AppCompatActivity() {
 
         mNsdManager!!.discoverServices("_valetudo._tcp.", NsdManager.PROTOCOL_DNS_SD, object : NsdManager.DiscoveryListener {
             override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {
-                Log.d(TAG, "Start service discovery failed with error code $errorCode")
+                Log.d(logTag, "Start service discovery failed with error code $errorCode")
             }
 
             override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {
-                Log.d(TAG, "Stop service discovery failed with error code $errorCode")
+                Log.d(logTag, "Stop service discovery failed with error code $errorCode")
             }
 
             override fun onDiscoveryStarted(serviceType: String?) {
-                Log.d(TAG, "Service discovery started")
+                Log.d(logTag, "Service discovery started")
             }
 
             override fun onDiscoveryStopped(serviceType: String?) {
-                Log.d(TAG, "Service discovery stopped successfully")
+                Log.d(logTag, "Service discovery stopped successfully")
             }
 
             override fun onServiceFound(serviceInfo: NsdServiceInfo?) {
-                Log.d(TAG, "Service discovery success $serviceInfo")
+                Log.d(logTag, "Service discovery success $serviceInfo")
 
                 if (serviceInfo != null) {
                     tryResolve(serviceInfo)
                 } else {
-                    Log.d(TAG, "ServiceInfo is null")
+                    Log.d(logTag, "ServiceInfo is null")
                 }
 
             }
 
             override fun onServiceLost(serviceInfo: NsdServiceInfo?) {
-                Log.d(TAG, "Service lost $serviceInfo")
+                Log.d(logTag, "Service lost $serviceInfo")
                 /*
                     It shall be noted that this is useless because there's no way to find out
                     which service the serviceInfo belongs to since there's no unique ID or similar
