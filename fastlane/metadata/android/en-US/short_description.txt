@@ -1,1 +1,1 @@
-Easily find and connect to Valetudo robot vacuums on your network.
+Easily find and connect to Valetudo robot vacuums on your network or join new ones
