@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         provisionButton.setOnClickListener {
-            val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
+            val provisioningIntent = Intent(this, ProvisioningWizardPageOneActivity::class.java)
 
             startActivity(provisioningIntent)
         }

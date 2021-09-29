@@ -18,26 +18,26 @@ import kotlin.concurrent.thread
 
 class ValetudoProvisioningHelper(var wifiManager: WifiManager, var connectivityManager: ConnectivityManager) {
     fun checkForValetudo(): DiscoveredUnprovisionedValetudoInstance? {
-        var discoveredInstance: DiscoveredUnprovisionedValetudoInstance? = null;
+        var discoveredInstance: DiscoveredUnprovisionedValetudoInstance? = null
         val wifiNetwork = this.getRobotWifiNetwork()
 
         if (wifiNetwork != null) {
             try {
                 val valetudoVersionConnection = wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/valetudo/version"))
-                valetudoVersionConnection.connect();
+                valetudoVersionConnection.connect()
 
                 val valetudoVersionJSON = this.getJSON(valetudoVersionConnection)
 
 
 
                 val valetudoRobotInfoConnection = wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/robot"))
-                valetudoRobotInfoConnection.connect();
+                valetudoRobotInfoConnection.connect()
 
                 val valetudoRobotJSON = this.getJSON(valetudoRobotInfoConnection)
 
 
-                Log.d("ValetudoVersion", valetudoVersionJSON.toString());
-                Log.d("RobotInfo", valetudoRobotJSON.toString());
+                Log.d("ValetudoVersion", valetudoVersionJSON.toString())
+                Log.d("RobotInfo", valetudoRobotJSON.toString())
 
                 discoveredInstance = DiscoveredUnprovisionedValetudoInstance(
                     valetudoRobotJSON.getString("modelName") ,
@@ -61,15 +61,15 @@ class ValetudoProvisioningHelper(var wifiManager: WifiManager, var connectivityM
 
         if (wifiNetwork != null) {
             try {
-                val connection = wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/robot/capabilities/WifiConfigurationCapability")) as HttpURLConnection;
+                val connection = wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/robot/capabilities/WifiConfigurationCapability")) as HttpURLConnection
                 val payload = "{\"ssid\":\"$SSID\",\"credentials\":{\"type\":\"wpa2_psk\",\"typeSpecificSettings\":{\"password\":\"$password\"}}}".toByteArray()
 
                 connection.requestMethod = "PUT"
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "*/*");
-                connection.doOutput = true;
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.setRequestProperty("Accept", "*/*")
+                connection.doOutput = true
 
-                connection.outputStream.write(payload, 0, payload.size);
+                connection.outputStream.write(payload, 0, payload.size)
 
                 result = connection.responseCode
             } catch(ex: Exception) {
@@ -82,11 +82,11 @@ class ValetudoProvisioningHelper(var wifiManager: WifiManager, var connectivityM
         return result
     }
 
-    private fun getRobotWifiNetwork(): Network? {
-        val allNetworks = connectivityManager.allNetworks;
+    fun getRobotWifiNetwork(): Network? {
+        val allNetworks = connectivityManager.allNetworks
 
         val wifiNetwork = allNetworks.find {
-            val capabilities = connectivityManager.getNetworkCapabilities(it);
+            val capabilities = connectivityManager.getNetworkCapabilities(it)
             capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
         }
 

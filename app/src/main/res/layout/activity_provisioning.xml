@@ -12,24 +12,24 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/scan"
-        android:textSize="24sp"
-        app:icon="@android:drawable/ic_menu_search"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/help_text_provisioning"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/provisioning_help"
-        android:textAlignment="viewStart"
+        android:id="@+id/no_valetudo_found_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_valetudo_found_hint"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scan_button" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.26" />
+
 
     <LinearLayout
         android:id="@+id/provisioning_inputs"
@@ -37,14 +37,14 @@
         android:layout_height="335dp"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/help_text_provisioning"
-        app:layout_constraintVertical_bias="0.3">
+        app:layout_constraintTop_toBottomOf="@+id/scan_button"
+        app:layout_constraintVertical_bias="0.0">
 
 
         <TextView

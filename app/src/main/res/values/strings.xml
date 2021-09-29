@@ -27,5 +27,14 @@
     <string name="connect">Connect</string>
     <string name="password">Password</string>
     <string name="ssid">SSID</string>
-    <string name="scan">Scan</string>
+    <string name="scan">Scan for Valetudo</string>
+    <string name="wizard_page_1_hint_1">This Wizard will help you join a Valetudo-enabled Robot to your Wi-Fi network.\n\nPlease note that this will _not_ install Valetudo.\nYou will need a robot that already has Valetudo installed for this to do anything useful.</string>
+    <string name="wizard_page_1_next_button">Use the App</string>
+    <string name="wizard_page_1_wizard_button_permission">Grant location access</string>
+    <string name="wizard_page_1_skip_button">I\'m already connected</string>
+    <string name="wizard_page_1_hint_2">You can either use the App to connect to the Robots Wi-Fi Access Point or skip the procedure and use your phones system settings to connect.\n\nNote that using the App to connect to the AP requires the location permission, because Android doesn\'t allow access to Wifi Network scanning without it.</string>
+    <string name="wizard_page_2_hint">Please select a network</string>
+    <string name="wizard_page_2_scan_button">Scan</string>
+    <string name="no_ssids_found_hint">No SSIDs matching known robot APs found.\nTry pressing scan to refresh</string>
+    <string name="no_valetudo_found_hint">No Valetudo found on this Network.\nTry pressing scan to refresh</string>
 </resources>
