@@ -1,16 +1,18 @@
 package cloud.valetudo.companion
 
 import android.content.Context
-import android.net.nsd.NsdManager
-import android.net.nsd.NsdServiceInfo
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import kotlin.collections.ArrayList
 import android.content.Intent
 import android.net.Uri
+import android.net.nsd.NsdManager
+import android.net.nsd.NsdServiceInfo
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.thread
@@ -52,9 +54,15 @@ class MainActivity : AppCompatActivity() {
 
         discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val instance = mValetudoInstances[position]
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${instance.host}"))
+            var builder = CustomTabsIntent.Builder()
 
-            startActivity(browserIntent)
+            val defaultColors = CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(ResourcesCompat.getColor(resources, R.color.valetudo_main, null))
+                .build()
+            builder.setDefaultColorSchemeParams(defaultColors)
+
+            var customTabsIntent: CustomTabsIntent = builder.build();
+            customTabsIntent.launchUrl(this, Uri.parse("http://${instance.host}"))
         }
 
         provisionButton.setOnClickListener {
