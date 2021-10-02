@@ -7,50 +7,66 @@
 
     <TextView
         android:id="@+id/manufacturerAndModel"
-        android:layout_width="380dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
         android:gravity="bottom"
+        android:maxLines="1"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="manufacturerAndModel" />
 
-    <TextView
-        android:id="@+id/valetudoVersion"
-        android:layout_width="180dp"
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:gravity="bottom"
-        android:textSize="20sp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
-        tools:text="valetudoVersion" />
+        app:layout_constraintTop_toBottomOf="@id/manufacturerAndModel"
+        android:stretchColumns="0,1">
 
-    <TextView
-        android:id="@+id/uniqueIdentifier"
-        android:layout_width="195dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="bottom"
-        android:textStyle="italic"
-        app:layout_constraintStart_toEndOf="@+id/valetudoVersion"
-        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
-        tools:text="uniqueIdentifier" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/valetudoVersion"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:textSize="20sp"
+                android:layout_column="0"
+                tools:text="valetudoVersion" />
+
+            <TextView
+                android:id="@+id/uniqueIdentifier"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:gravity="center_vertical"
+                android:textStyle="italic"
+                tools:text="uniqueIdentifier" />
+        </TableRow>
+
+    </TableLayout>
 
     <TextView
         android:id="@+id/domainAndHost"
-        android:layout_width="380dp"
+        android:layout_width="0dp"
         android:layout_height="15dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
         android:gravity="bottom"
         android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valetudoVersion"
+        app:layout_constraintTop_toBottomOf="@id/tableLayout"
         tools:text="domainAndHost" />
 
     <Space
