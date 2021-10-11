@@ -12,7 +12,10 @@
         Troubleshooting:
         \n
         \n- Are you connected to your Wi-Fi?
+        \n- Is the robot turned on?
+        \n- Have you tried rebooting the robot?
         \n- Are you running Valetudo 2021.07.0 or newer?
+        \n- Are you connected to the same network as the robot?
         \n- Are you connected to a VPN?
         \n- Does your network setup block/filter mDNS/Bonjour?
     </string>
