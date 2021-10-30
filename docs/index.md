@@ -12,6 +12,8 @@ Note that this app is completely optional and only exists to make Valetudo more 
 This app will not provide any UI to interface with Valetudo during normal operation.
 Basically, you can think of it as an automatically updating bookmark + some wizard stuff.
 
+[Its privacy policy can be found here.](https://companion.valetudo.cloud/privacy-policy.html)
+
 ## How to Install
 
 The preferred way of obtaining the App is of course [F-Droid](https://f-droid.org/repository/browse/?fdid=cloud.valetudo.companion).
