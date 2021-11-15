@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         val icon = findViewById<ImageView>(R.id.valetudo_logo)
         var iconClicks = 0
 
+        if ((1..100).random() == 42) {
+            icon.setImageResource(R.drawable.ic_valetudog)
+        }
+
         icon.setOnClickListener {
             if (iconClicks == 9) {
                 icon.setImageResource(R.drawable.ic_valetudog)
