@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                         val manufacturer = String(serviceInfo.attributes["manufacturer"] ?: byteArrayOf())
                         val model = String(serviceInfo.attributes["model"] ?: byteArrayOf())
                         val version = String(serviceInfo.attributes["version"] ?: byteArrayOf())
-                        val hostAddress = serviceInfo.host.hostAddress
+                        val hostAddress = serviceInfo.host!!.hostAddress
 
 
                         if(id != null) {
