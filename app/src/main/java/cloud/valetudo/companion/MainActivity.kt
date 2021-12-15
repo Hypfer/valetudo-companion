@@ -1,20 +1,22 @@
 package cloud.valetudo.companion
 
+import android.content.ActivityNotFoundException
 import android.content.Context
-import android.net.nsd.NsdManager
-import android.net.nsd.NsdServiceInfo
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import kotlin.collections.ArrayList
 import android.content.Intent
 import android.net.Uri
+import android.net.nsd.NsdManager
+import android.net.nsd.NsdServiceInfo
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.thread
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,10 +58,50 @@ class MainActivity : AppCompatActivity() {
 
         discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val instance = mValetudoInstances[position]
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${instance.host}"))
+            val defaultColors = CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(ResourcesCompat.getColor(resources, R.color.valetudo_main, null))
+                .build()
 
-            startActivity(browserIntent)
+
+            //This try/catch might be utterly useless but i see no other possibility to handle no browser being installed
+            try {
+                CustomTabsIntent.Builder()
+                    .setDefaultColorSchemeParams(defaultColors)
+                    .setUrlBarHidingEnabled(false)
+                    .build()
+                    .launchUrl(this, Uri.parse("http://${instance.host}"))
+            } catch (e: ActivityNotFoundException) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "No http:// intent handler installed.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
         }
+
+        discoveredList.onItemLongClickListener =
+            AdapterView.OnItemLongClickListener { _, _, position, _ ->
+                val instance = mValetudoInstances[position]
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://${instance.host}"))
+
+                try {
+                    startActivity(browserIntent)
+                    return@OnItemLongClickListener true
+                } catch (e: ActivityNotFoundException) {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "No http:// intent handler installed.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@OnItemLongClickListener false
+                }
+
+            }
 
         provisionButton.setOnClickListener {
             val provisioningIntent = Intent(this, ProvisioningWizardPageOneActivity::class.java)
