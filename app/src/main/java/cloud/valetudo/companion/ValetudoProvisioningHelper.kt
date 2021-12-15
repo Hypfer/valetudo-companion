@@ -55,14 +55,14 @@ class ValetudoProvisioningHelper(var wifiManager: WifiManager, var connectivityM
         return discoveredInstance
     }
 
-    fun provisionValetudo(SSID: String, password: String): Int {
+    fun provisionValetudo(ssid: String, password: String): Int {
         val wifiNetwork = this.getRobotWifiNetwork()
         var result : Int = -1
 
         if (wifiNetwork != null) {
             try {
                 val connection = wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/robot/capabilities/WifiConfigurationCapability")) as HttpURLConnection
-                val payload = "{\"ssid\":\"$SSID\",\"credentials\":{\"type\":\"wpa2_psk\",\"typeSpecificSettings\":{\"password\":\"$password\"}}}".toByteArray()
+                val payload = "{\"ssid\":\"$ssid\",\"credentials\":{\"type\":\"wpa2_psk\",\"typeSpecificSettings\":{\"password\":\"$password\"}}}".toByteArray()
 
                 connection.requestMethod = "PUT"
                 connection.setRequestProperty("Content-Type", "application/json")
