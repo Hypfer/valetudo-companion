@@ -52,7 +52,10 @@ class MainActivity : AppCompatActivity() {
                 .build()
 
 
-            //This try/catch might be utterly useless but i see no other possibility to handle no browser being installed
+            /*
+                Even though there's nothing in the docs indicating that this may throw,
+                it will do exactly that if there is no browser installed
+             */
             try {
                 CustomTabsIntent.Builder()
                     .setDefaultColorSchemeParams(defaultColors)

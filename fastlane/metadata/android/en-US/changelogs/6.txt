@@ -1,0 +1,2 @@
+- Tap on a found instance to open it in a customTab
+- Long-press on a found instance to open it in your browser
