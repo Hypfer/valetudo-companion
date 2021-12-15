@@ -31,30 +31,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val icon = findViewById<ImageView>(R.id.valetudo_logo)
-        var iconClicks = 0
-
-        if ((1..100).random() == 42) {
-            icon.setImageResource(R.drawable.ic_valetudog)
-        }
-
-        icon.setOnClickListener {
-            if (iconClicks == 9) {
-                icon.setImageResource(R.drawable.ic_valetudog)
-            } else {
-                iconClicks++
-            }
-        }
-
-        val mainText = findViewById<TextView>(R.id.main_text)
-        val helpText = findViewById<TextView>(R.id.help_text)
-        val provisionButton = findViewById<FloatingActionButton>(R.id.enterProvisioningActivityButton)
-        val listLayout = findViewById<LinearLayout>(R.id.list_layout)
-
         val itemsAdapter = DiscoveredValetudoInstancesAdapter(this, R.layout.discovered_instance_list_item_layout, mValetudoInstances)
 
+        setupUIEventHandlers(itemsAdapter)
+        enableEgg()
+        startDiscovery(itemsAdapter)
+    }
+
+    private fun setupUIEventHandlers(itemsAdapter: DiscoveredValetudoInstancesAdapter) {
         val discoveredList = findViewById<ListView>(R.id.discovered_list)
+        val provisionButton = findViewById<FloatingActionButton>(R.id.enterProvisioningActivityButton)
+
         discoveredList.adapter = itemsAdapter
+
 
         discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val instance = mValetudoInstances[position]
@@ -103,79 +92,15 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+
         provisionButton.setOnClickListener {
             val provisioningIntent = Intent(this, ProvisioningWizardPageOneActivity::class.java)
 
             startActivity(provisioningIntent)
         }
+    }
 
-        fun addDiscoveredDevice(newInstance: DiscoveredValetudoInstance) {
-            val oldInstance: DiscoveredValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
-            var idx: Int = -1
-
-            if (oldInstance != null) {
-                idx = mValetudoInstances.indexOf(oldInstance)
-            }
-
-            runOnUiThread {
-                if (idx > -1) {
-                    mValetudoInstances[idx] = newInstance
-                } else {
-                    mValetudoInstances.add(newInstance)
-                }
-
-                itemsAdapter.notifyDataSetChanged()
-            }
-        }
-
-        fun tryResolve(serviceInfo: NsdServiceInfo) {
-            thread {
-                resolveSemaphore.acquire()
-
-                mNsdManager!!.resolveService(serviceInfo, object : NsdManager.ResolveListener {
-                    override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
-                        resolveSemaphore.release()
-
-                        Log.d(logTag, "Service resolve failed $serviceInfo Error Code: $errorCode")
-                    }
-
-                    override fun onServiceResolved(serviceInfo: NsdServiceInfo?) {
-                        resolveSemaphore.release()
-
-                        runOnUiThread {
-                            mainText.text = resources.getString(R.string.found_devices)
-                            helpText.visibility = View.GONE
-                            listLayout.visibility = View.VISIBLE
-                        }
-
-                        Log.d(logTag, "Service resolve success $serviceInfo")
-
-                        val serviceName = serviceInfo!!.serviceName ?: ""
-                        val id = serviceInfo.attributes["id"]
-
-                        val manufacturer = String(serviceInfo.attributes["manufacturer"] ?: byteArrayOf())
-                        val model = String(serviceInfo.attributes["model"] ?: byteArrayOf())
-                        val version = String(serviceInfo.attributes["version"] ?: byteArrayOf())
-                        val hostAddress = serviceInfo.host!!.hostAddress
-
-
-                        if(id != null) {
-                            addDiscoveredDevice(DiscoveredValetudoInstance(
-                                String(id),
-                                model,
-                                manufacturer,
-                                version,
-                                hostAddress,
-                                serviceName
-                            ))
-                        }
-
-                    }
-                })
-            }
-        }
-
-
+    private fun startDiscovery(itemsAdapter: DiscoveredValetudoInstancesAdapter) {
         mNsdManager = (getSystemService(Context.NSD_SERVICE) as NsdManager)
 
         mNsdManager!!.discoverServices("_valetudo._tcp.", NsdManager.PROTOCOL_DNS_SD, object : NsdManager.DiscoveryListener {
@@ -199,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(logTag, "Service discovery success $serviceInfo")
 
                 if (serviceInfo != null) {
-                    tryResolve(serviceInfo)
+                    tryResolve(serviceInfo, itemsAdapter)
                 } else {
                     Log.d(logTag, "ServiceInfo is null")
                 }
@@ -218,5 +143,96 @@ class MainActivity : AppCompatActivity() {
                  */
             }
         })
+    }
+
+
+    private fun addDiscoveredDevice(newInstance: DiscoveredValetudoInstance, itemsAdapter: DiscoveredValetudoInstancesAdapter) {
+        val oldInstance: DiscoveredValetudoInstance? = mValetudoInstances.find {it.id == newInstance.id}
+        var idx: Int = -1
+
+        if (oldInstance != null) {
+            idx = mValetudoInstances.indexOf(oldInstance)
+        }
+
+        runOnUiThread {
+            if (idx > -1) {
+                mValetudoInstances[idx] = newInstance
+            } else {
+                mValetudoInstances.add(newInstance)
+            }
+
+            itemsAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun tryResolve(serviceInfo: NsdServiceInfo, itemsAdapter: DiscoveredValetudoInstancesAdapter) {
+        thread {
+            resolveSemaphore.acquire()
+
+            mNsdManager!!.resolveService(serviceInfo, object : NsdManager.ResolveListener {
+                override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
+                    resolveSemaphore.release()
+
+                    Log.d(logTag, "Service resolve failed $serviceInfo Error Code: $errorCode")
+                }
+
+                override fun onServiceResolved(serviceInfo: NsdServiceInfo?) {
+                    resolveSemaphore.release()
+
+                    if (itemsAdapter.isEmpty) {
+                        runOnUiThread {
+                            val mainText = findViewById<TextView>(R.id.main_text)
+                            val helpText = findViewById<TextView>(R.id.help_text)
+                            val listLayout = findViewById<LinearLayout>(R.id.list_layout)
+
+                            mainText.text = resources.getString(R.string.found_devices)
+                            helpText.visibility = View.GONE
+                            listLayout.visibility = View.VISIBLE
+                        }
+                    }
+
+
+                    Log.d(logTag, "Service resolve success $serviceInfo")
+
+                    val serviceName = serviceInfo!!.serviceName ?: ""
+                    val id = serviceInfo.attributes["id"]
+
+                    val manufacturer = String(serviceInfo.attributes["manufacturer"] ?: byteArrayOf())
+                    val model = String(serviceInfo.attributes["model"] ?: byteArrayOf())
+                    val version = String(serviceInfo.attributes["version"] ?: byteArrayOf())
+                    val hostAddress = serviceInfo.host!!.hostAddress
+
+
+                    if(id != null) {
+                        addDiscoveredDevice(DiscoveredValetudoInstance(
+                            String(id),
+                            model,
+                            manufacturer,
+                            version,
+                            hostAddress,
+                            serviceName
+                        ), itemsAdapter)
+                    }
+
+                }
+            })
+        }
+    }
+
+    private fun enableEgg() {
+        val icon = findViewById<ImageView>(R.id.valetudo_logo)
+        var iconClicks = 0
+
+        if ((1..100).random() == 42) {
+            icon.setImageResource(R.drawable.ic_valetudog)
+        }
+
+        icon.setOnClickListener {
+            if (iconClicks == 9) {
+                icon.setImageResource(R.drawable.ic_valetudog)
+            } else {
+                iconClicks++
+            }
+        }
     }
 }
