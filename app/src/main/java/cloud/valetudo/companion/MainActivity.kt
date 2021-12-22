@@ -164,6 +164,8 @@ class MainActivity : AppCompatActivity() {
                 mValetudoInstances.add(newInstance)
             }
 
+            mValetudoInstances.sortBy { it.id }
+
             itemsAdapter.notifyDataSetChanged()
         }
     }
