@@ -23,15 +23,25 @@ class ProvisioningActivity : AppCompatActivity() {
         var withResult = false
 
         if (intent.extras != null) {
-            newNetworkId = intent.extras!!["newNetworkId"] as Int?
-            withResult = intent.extras!!["withResult"] as Boolean
+            try {
+                newNetworkId = intent.extras!!["newNetworkId"] as Int?
+                withResult = intent.extras!!["withResult"] as Boolean
+            } catch(ex: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this@ProvisioningActivity, "Received invalid intent extras", Toast.LENGTH_LONG).show()
+
+                    this.finish()
+                }
+
+                return
+            }
         }
 
 
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
-        var provisioningHelper: ValetudoProvisioningHelper? = null
+        val provisioningHelper: ValetudoProvisioningHelper
 
         if (wifiManager != null && connectivityManager != null) {
             provisioningHelper = ValetudoProvisioningHelper(
@@ -44,6 +54,8 @@ class ProvisioningActivity : AppCompatActivity() {
             runOnUiThread {
                 this.finish()
             }
+
+            return
         }
 
         var foundRobot : DiscoveredUnprovisionedValetudoInstance? = null
@@ -60,38 +72,32 @@ class ProvisioningActivity : AppCompatActivity() {
         val passwordInput = findViewById<EditText>(R.id.input_password)
 
         fun scanForValetudo() {
-            if (provisioningHelper != null) {
-                thread {
-                    val scanResult = provisioningHelper.checkForValetudo()
+            thread {
+                val scanResult = provisioningHelper.checkForValetudo()
 
-                    if (scanResult != null) {
-                        foundRobot = scanResult
+                if (scanResult != null) {
+                    foundRobot = scanResult
 
-                        runOnUiThread {
-                            provisioningInputs.visibility = View.VISIBLE
-                            helpText.visibility = View.GONE
+                    runOnUiThread {
+                        provisioningInputs.visibility = View.VISIBLE
+                        helpText.visibility = View.GONE
 
-                            foundRobotLabel.text = resources.getString(
-                                R.string.provisioning_found_valetudo,
+                        foundRobotLabel.text = resources.getString(
+                            R.string.provisioning_found_valetudo,
 
-                                scanResult.manufacturer,
-                                scanResult.model
-                            )
-                        }
-                    } else {
-                        foundRobot = null
-
-                        runOnUiThread {
-                            provisioningInputs.visibility = View.INVISIBLE
-                            helpText.visibility = View.VISIBLE
-
-                            Toast.makeText(this@ProvisioningActivity, "Scan finished without results", Toast.LENGTH_SHORT).show()
-                        }
+                            scanResult.manufacturer,
+                            scanResult.model
+                        )
                     }
-                }
-            } else {
-                runOnUiThread {
-                    Toast.makeText(this@ProvisioningActivity, "Missing provisioningHelper", Toast.LENGTH_LONG).show()
+                } else {
+                    foundRobot = null
+
+                    runOnUiThread {
+                        provisioningInputs.visibility = View.INVISIBLE
+                        helpText.visibility = View.VISIBLE
+
+                        Toast.makeText(this@ProvisioningActivity, "Scan finished without results", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -103,54 +109,48 @@ class ProvisioningActivity : AppCompatActivity() {
         scanForValetudo()
 
         connectButton.setOnClickListener {
-            if (provisioningHelper != null) {
-                if(foundRobot != null) {
-                    thread {
-                        runOnUiThread {
-                            connectButton.isEnabled = false
-                        }
-
-                        val connectResult = provisioningHelper.provisionValetudo(ssidInput.text.toString(), passwordInput.text.toString())
-
-                        if (connectResult == 200) {
-
-                            @Suppress("DEPRECATION")
-                            if (newNetworkId != null) { //This is only != null on android versions <= Q
-                                wifiManager!!.removeNetwork(newNetworkId)
-                            }
-
-                            runOnUiThread {
-                                Toast.makeText(this@ProvisioningActivity, "Provisioning successful", Toast.LENGTH_LONG).show()
-
-                                if (!withResult) {
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-                                    startActivity(intent)
-                                } else {
-                                    val returnIntent = Intent()
-                                    setResult(RESULT_OK, returnIntent)
-
-                                    finish()
-                                }
-
-                            }
-                        } else {
-                            runOnUiThread {
-                                Toast.makeText(this@ProvisioningActivity, "Wifi Provisioning failed with code $connectResult", Toast.LENGTH_LONG).show()
-
-                                connectButton.isEnabled = true
-                            }
-                        }
-                    }
-                } else {
+            if(foundRobot != null) {
+                thread {
                     runOnUiThread {
-                        Toast.makeText(this@ProvisioningActivity, "Missing foundRobot", Toast.LENGTH_LONG).show()
+                        connectButton.isEnabled = false
+                    }
+
+                    val connectResult = provisioningHelper.provisionValetudo(ssidInput.text.toString(), passwordInput.text.toString())
+
+                    if (connectResult == 200) {
+
+                        @Suppress("DEPRECATION")
+                        if (newNetworkId != null) { //This is only != null on android versions <= Q
+                            wifiManager.removeNetwork(newNetworkId)
+                        }
+
+                        runOnUiThread {
+                            Toast.makeText(this@ProvisioningActivity, "Provisioning successful", Toast.LENGTH_LONG).show()
+
+                            if (!withResult) {
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+                                startActivity(intent)
+                            } else {
+                                val returnIntent = Intent()
+                                setResult(RESULT_OK, returnIntent)
+
+                                finish()
+                            }
+
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(this@ProvisioningActivity, "Wifi Provisioning failed with code $connectResult", Toast.LENGTH_LONG).show()
+
+                            connectButton.isEnabled = true
+                        }
                     }
                 }
             } else {
                 runOnUiThread {
-                    Toast.makeText(this@ProvisioningActivity, "Missing provisioningHelper", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ProvisioningActivity, "Missing foundRobot", Toast.LENGTH_LONG).show()
                 }
             }
         }
