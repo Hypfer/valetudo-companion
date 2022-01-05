@@ -66,29 +66,46 @@
             android:layout_width="match_parent"
             android:layout_height="24dp" />
 
-        <EditText
-            android:id="@+id/input_ssid"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etSSIDLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/ssid"
-            android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:importantForAutofill="no" />
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_ssid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ssid"
+                android:importantForAutofill="no" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="16dp" />
 
-        <EditText
-            android:id="@+id/input_password"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
             android:minHeight="48dp"
-            android:importantForAutofill="no" />
+            app:passwordToggleEnabled="true"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Space
             android:layout_width="match_parent"
