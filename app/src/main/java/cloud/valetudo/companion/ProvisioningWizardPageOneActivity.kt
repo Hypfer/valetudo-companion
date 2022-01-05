@@ -20,7 +20,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
-        var provisioningHelper: ValetudoProvisioningHelper? = null
+        val provisioningHelper: ValetudoProvisioningHelper
 
         if (wifiManager != null && connectivityManager != null) {
             provisioningHelper = ValetudoProvisioningHelper(
@@ -33,6 +33,8 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
             runOnUiThread {
                 this.finish()
             }
+
+            return
         }
 
         val nextButton = findViewById<Button>(R.id.wizard_page_1_next_button)
@@ -53,7 +55,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
         }
 
         skipButton.setOnClickListener {
-            if (provisioningHelper!!.getRobotWifiNetwork() != null) {
+            if (provisioningHelper.getRobotWifiNetwork() != null) {
                 val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
 
                 startActivity(provisioningIntent)

@@ -70,10 +70,12 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             runOnUiThread {
                 this.finish()
             }
+
+            return
         }
 
         fun updateScanResults() {
-            val results = wifiManager!!.scanResults
+            val results = wifiManager.scanResults
             val filteredResults = results.filter {
                 it.SSID.startsWith("roborock-vacuum-") ||
                 it.SSID.startsWith("viomi-vacuum-") ||
@@ -101,7 +103,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
         @Suppress("DEPRECATION")
         scanButton.setOnClickListener {
-            wifiManager!!.startScan()
+            wifiManager.startScan()
 
             updateScanResults()
         }
@@ -186,7 +188,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                 wifiConfig.SSID = "\"" + result.SSID + "\""
                 wifiConfig.allowedKeyManagement.set(android.net.wifi.WifiConfiguration.KeyMgmt.NONE)
 
-                val newNetworkId = wifiManager!!.addNetwork(wifiConfig)
+                val newNetworkId = wifiManager.addNetwork(wifiConfig)
 
 
                 wifiManager.saveConfiguration()
