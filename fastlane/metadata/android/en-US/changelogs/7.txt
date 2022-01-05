@@ -1,0 +1,3 @@
+- Allow display of the entered wifi password
+- Sort discovered instances by id
+- Fix crash on invalid intent extras in provisioning activity
