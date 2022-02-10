@@ -115,10 +115,10 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                provisioningIntent.putExtra("newNetworkId", newNetworkId)
             }
 
+            provisioningIntent.putExtra("withResult", withResult)
+
             @Suppress("DEPRECATION")
             if (withResult) {
-                provisioningIntent.putExtra("withResult", true)
-
                 startActivityForResult(provisioningIntent, 5)
             } else {
                 startActivity(provisioningIntent)
