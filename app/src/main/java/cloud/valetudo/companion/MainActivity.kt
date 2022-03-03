@@ -8,8 +8,12 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -37,6 +41,29 @@ class MainActivity : AppCompatActivity() {
         enableEgg()
         startDiscovery(itemsAdapter)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_help -> {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setTitle(R.string.help_dialog_title)
+                builder.setMessage(R.string.help_dialog_content)
+                builder.setPositiveButton(R.string.dialog_action_ok, null)
+
+                val alert: AlertDialog = builder.create()
+                alert.show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun setupUIEventHandlers(itemsAdapter: DiscoveredValetudoInstancesAdapter) {
         val discoveredList = findViewById<ListView>(R.id.discovered_list)

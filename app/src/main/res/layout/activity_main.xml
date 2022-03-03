@@ -58,10 +58,11 @@
         android:contentDescription="@string/provision_new"
         android:focusable="true"
         app:backgroundTint="@color/valetudo_main"
+        app:tint="?android:attr/textColorPrimaryInverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="28dp"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/ic_baseline_add" />
 
     <TextView
         android:id="@+id/help_text"

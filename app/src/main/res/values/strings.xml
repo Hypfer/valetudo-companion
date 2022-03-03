@@ -8,6 +8,21 @@
     <string name="discovered_valetudo_instance_list_item_domain_and_host" translatable="false">valetudo_%s.local (%s)</string>
     <string name="valetudo_logo_content_description">Valetudo Logo</string>
 
+    <string name="help_button_title">Help</string>
+    <string name="dialog_action_ok">OK</string>
+    <string name="help_dialog_title">How do I use this app?</string>
+
+    <string name="help_dialog_content">
+        This app discovers Valetudo instances on your network via mDNS/Bonjour.
+        \n
+        \nYou can open the webinterface of a discovered robot by tapping on its list entry.
+        Additionally, you can also long-press the entry to instead open the webinterface in a new tab of your browser.
+
+        \n
+        \nApart from discovering existing Valetudo instances on your network, the app can also help you
+        connect new ones to it. Simply tap the add button at the bottom and follow the instructions.
+    </string>
+
     <string name="discovering_help">
         Troubleshooting:
         \n
