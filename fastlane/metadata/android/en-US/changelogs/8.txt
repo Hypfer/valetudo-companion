@@ -1,0 +1,2 @@
+- Add help button
+- Properly fix crash on invalid intent extras in provisioning activity
