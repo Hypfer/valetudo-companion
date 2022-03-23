@@ -78,6 +78,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             val results = wifiManager.scanResults
             val filteredResults = results.filter {
                 it.SSID.startsWith("roborock-vacuum-") ||
+                it.SSID.startsWith("rockrobo-vacuum-") ||
                 it.SSID.startsWith("viomi-vacuum-") ||
                 it.SSID.startsWith("dreame-vacuum-")
             }
