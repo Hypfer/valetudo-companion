@@ -57,21 +57,10 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
 
                 startActivity(wizardPageTwoIntent)
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    ActivityCompat.requestPermissions(this,
-                        PERMISSIONS_REQUIRED,
-                        PERMISSION_REQUEST_CODE
-                    )
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(
-                            this@ProvisioningWizardPageOneActivity,
-                            "Wi-Fi SSID scanning requires the ACCESS_FINE_LOCATION permission.\nDid you select \"Don't ask again\"?",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-
+                ActivityCompat.requestPermissions(this,
+                    PERMISSIONS_REQUIRED,
+                    PERMISSION_REQUEST_CODE
+                )
             }
         }
 
