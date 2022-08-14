@@ -10,8 +10,8 @@ android {
         applicationId "cloud.valetudo.companion"
         minSdk 23
         targetSdk 32
-        versionCode 9
-        versionName "2022.08.0"
+        versionCode 10
+        versionName "2022.08.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
