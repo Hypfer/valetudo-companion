@@ -1,0 +1,3 @@
+- Detect Roborock V1 SSIDs
+- Better permission request handling
+- Bump to targetSDK 32
