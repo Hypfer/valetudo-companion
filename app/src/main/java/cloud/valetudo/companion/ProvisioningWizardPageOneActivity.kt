@@ -2,7 +2,7 @@ package cloud.valetudo.companion
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
@@ -12,6 +12,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+
+val PERMISSIONS_REQUIRED = arrayOf(
+    Manifest.permission.ACCESS_COARSE_LOCATION,
+    Manifest.permission.ACCESS_FINE_LOCATION
+);
+const val PERMISSION_REQUEST_CODE = 1234;
+
 
 class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,15 +49,29 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
 
 
         nextButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+            ) {
                 val wizardPageTwoIntent = Intent(this, ProvisioningWizardPageTwoActivity::class.java)
 
                 startActivity(wizardPageTwoIntent)
             } else {
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    1234
-                )
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    ActivityCompat.requestPermissions(this,
+                        PERMISSIONS_REQUIRED,
+                        PERMISSION_REQUEST_CODE
+                    )
+                } else {
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@ProvisioningWizardPageOneActivity,
+                            "Wi-Fi SSID scanning requires the ACCESS_FINE_LOCATION permission.\nDid you select \"Don't ask again\"?",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+
             }
         }
 
@@ -65,6 +86,32 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
                 }
             }
         }
+    }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (
+                permissions contentEquals PERMISSIONS_REQUIRED &&
+                grantResults.all { it == PERMISSION_GRANTED }
+            ) {
+                val wizardPageTwoIntent = Intent(this, ProvisioningWizardPageTwoActivity::class.java)
+
+                startActivity(wizardPageTwoIntent)
+            } else {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@ProvisioningWizardPageOneActivity,
+                        "Wi-Fi SSID scanning requires the ACCESS_FINE_LOCATION permission",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 }

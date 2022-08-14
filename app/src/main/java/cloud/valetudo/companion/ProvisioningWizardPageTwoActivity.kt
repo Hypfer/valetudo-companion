@@ -1,6 +1,8 @@
 package cloud.valetudo.companion
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.*
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
@@ -19,6 +21,7 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
 import android.view.View
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
@@ -52,6 +55,16 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Return to the previous activity if the user revoked the permission while we were in the background
+            runOnUiThread {
+                this.finish()
+            }
+
+            return
+        }
+
         setContentView(R.layout.activity_provisioning_page2)
 
         val helpText = findViewById<TextView>(R.id.no_ssids_found_hint)
