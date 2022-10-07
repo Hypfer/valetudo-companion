@@ -215,11 +215,9 @@ class MainActivity : AppCompatActivity() {
                         runOnUiThread {
                             val mainText = findViewById<TextView>(R.id.main_text)
                             val helpText = findViewById<TextView>(R.id.help_text)
-                            val listLayout = findViewById<LinearLayout>(R.id.list_layout)
 
                             mainText.text = resources.getString(R.string.found_devices)
                             helpText.visibility = View.GONE
-                            listLayout.visibility = View.VISIBLE
                         }
                     }
 
@@ -241,7 +239,7 @@ class MainActivity : AppCompatActivity() {
                             model,
                             manufacturer,
                             version,
-                            hostAddress,
+                            hostAddress ?: "",
                             serviceName
                         ), itemsAdapter)
                     }
