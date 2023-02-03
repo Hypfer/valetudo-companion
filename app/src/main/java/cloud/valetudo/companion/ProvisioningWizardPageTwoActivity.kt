@@ -4,33 +4,25 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.*
+import android.net.ConnectivityManager.NetworkCallback
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
-import android.net.Network
-import android.net.LinkProperties
-import android.net.NetworkCapabilities
-import android.net.ConnectivityManager
-import android.net.ConnectivityManager.NetworkCallback
 import android.view.View
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import java.lang.Exception
-import kotlin.collections.ArrayList
+import cloud.valetudo.companion.activities.main.MainActivity
+import cloud.valetudo.companion.databinding.ActivityProvisioningPage2Binding
 
 
-class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
-
-    private var mRobotSSIDs = ArrayList<ScanResult>()
+class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
     private var mConnectivityManager: ConnectivityManager? = null
-    private var mNetworkCallback : NetworkCallback? = null
+    private var mNetworkCallback: NetworkCallback? = null
+
+    private lateinit var binding: ActivityProvisioningPage2Binding
 
     @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -39,7 +31,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
         if (mNetworkCallback != null && mConnectivityManager != null) {
             try {
                 mConnectivityManager!!.unregisterNetworkCallback(mNetworkCallback!!)
-            } catch(ex: Exception) {
+            } catch (ex: Exception) {
                 Log.e("ProvisioningWizardPageTwoActivity", ex.toString())
             }
         }
@@ -56,7 +48,11 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             // Return to the previous activity if the user revoked the permission while we were in the background
             runOnUiThread {
                 this.finish()
@@ -65,14 +61,13 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             return
         }
 
-        setContentView(R.layout.activity_provisioning_page2)
+        binding = ActivityProvisioningPage2Binding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val helpText = findViewById<TextView>(R.id.no_ssids_found_hint)
+        val helpText = binding.noSsidsFoundHint
 
-        val discoveredList = findViewById<ListView>(R.id.wizard_page_2_wifi_network_list)
-        val itemsAdapter = DiscoveredAPsAdapter(this, R.layout.discovered_ap_list_item_layout, mRobotSSIDs)
-        discoveredList.adapter = itemsAdapter
-
+        val discoveredList = binding.wizardPage2WifiNetworkList
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         mConnectivityManager = getSystemService(ConnectivityManager::class.java)
@@ -87,46 +82,11 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             return
         }
 
-        fun updateScanResults() {
-            val results = wifiManager.scanResults
-            val filteredResults = results.filter {
-                it.SSID.startsWith("roborock-vacuum-") ||
-                it.SSID.startsWith("rockrobo-vacuum-") ||
-                it.SSID.startsWith("viomi-vacuum-") ||
-                it.SSID.startsWith("dreame-vacuum-")
-            }
-
-            runOnUiThread {
-                mRobotSSIDs.clear()
-                mRobotSSIDs.addAll(filteredResults)
-
-                if (filteredResults.isNotEmpty()) {
-                    helpText.visibility = View.GONE
-                } else {
-                    helpText.visibility = View.VISIBLE
-                }
-
-                itemsAdapter.notifyDataSetChanged()
-            }
-
-        }
-
-        updateScanResults()
-
-        val scanButton = findViewById<Button>(R.id.wizard_page_2_scan_button)
-
-        @Suppress("DEPRECATION")
-        scanButton.setOnClickListener {
-            wifiManager.startScan()
-
-            updateScanResults()
-        }
-
         fun navigateToProvisioningActivity(newNetworkId: Int? = null, withResult: Boolean = false) {
             val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
 
             if (newNetworkId != null) {
-               provisioningIntent.putExtra("newNetworkId", newNetworkId)
+                provisioningIntent.putExtra("newNetworkId", newNetworkId)
             }
 
             provisioningIntent.putExtra("withResult", withResult)
@@ -141,10 +101,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
         }
 
-
-        discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val result = mRobotSSIDs[position]
-
+        val clickListener = { result: ScanResult ->
             @Suppress("DEPRECATION")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val builder = WifiNetworkSpecifier.Builder()
@@ -169,14 +126,20 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                         network: Network,
                         networkCapabilities: NetworkCapabilities
                     ) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onCapabilitiesChanged()")
+                        Log.d(
+                            "ProvisioningWizardPageTwoActivity",
+                            "requestNetwork onCapabilitiesChanged()"
+                        )
                     }
 
                     override fun onLinkPropertiesChanged(
                         network: Network,
                         linkProperties: LinkProperties
                     ) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onLinkPropertiesChanged()")
+                        Log.d(
+                            "ProvisioningWizardPageTwoActivity",
+                            "requestNetwork onLinkPropertiesChanged()"
+                        )
                     }
 
                     override fun onLosing(network: Network, maxMsToLive: Int) {
@@ -212,5 +175,37 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                 navigateToProvisioningActivity(newNetworkId)
             }
         }
+
+        val itemsAdapter = ScanResultAdapter(clickListener)
+        discoveredList.adapter = itemsAdapter
+
+        fun updateScanResults() {
+            val results = wifiManager.scanResults
+            val filteredResults = results.filter {
+                it.SSID.startsWith("roborock-vacuum-") ||
+                        it.SSID.startsWith("rockrobo-vacuum-") ||
+                        it.SSID.startsWith("viomi-vacuum-") ||
+                        it.SSID.startsWith("dreame-vacuum-")
+            }
+
+            runOnUiThread {
+                itemsAdapter.scanResults = results
+
+                if (filteredResults.isNotEmpty()) {
+                    helpText.visibility = View.GONE
+                } else {
+                    helpText.visibility = View.VISIBLE
+                }
+            }
+
+        }
+
+        @Suppress("DEPRECATION")
+        binding.wizardPage2ScanButton.setOnClickListener {
+            wifiManager.startScan()
+            updateScanResults()
+        }
+
+        updateScanResults()
     }
 }

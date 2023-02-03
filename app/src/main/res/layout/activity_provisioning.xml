@@ -8,9 +8,9 @@
         android:id="@+id/scan_button"
         android:layout_width="0dp"
         android:layout_height="64dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/scan"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,9 +35,9 @@
         android:id="@+id/provisioning_inputs"
         android:layout_width="0dp"
         android:layout_height="335dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
+        android:layout_marginEnd="32dp"
         android:orientation="vertical"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,8 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:minHeight="48dp"
-            >
+            android:minHeight="48dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_ssid"
@@ -94,8 +93,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:minHeight="48dp"
-            app:passwordToggleEnabled="true"
-            >
+            app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_password"
@@ -103,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:importantForAutofill="no"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
