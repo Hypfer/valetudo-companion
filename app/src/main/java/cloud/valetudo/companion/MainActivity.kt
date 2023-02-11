@@ -230,6 +230,7 @@ class MainActivity : AppCompatActivity() {
                     val manufacturer = String(serviceInfo.attributes["manufacturer"] ?: byteArrayOf())
                     val model = String(serviceInfo.attributes["model"] ?: byteArrayOf())
                     val version = String(serviceInfo.attributes["version"] ?: byteArrayOf())
+                    val name = String(serviceInfo.attributes["name"] ?: byteArrayOf())
                     val hostAddress = serviceInfo.host!!.hostAddress
 
 
@@ -240,7 +241,8 @@ class MainActivity : AppCompatActivity() {
                             manufacturer,
                             version,
                             hostAddress ?: "",
-                            serviceName
+                            serviceName,
+                            name
                         ), itemsAdapter)
                     }
 

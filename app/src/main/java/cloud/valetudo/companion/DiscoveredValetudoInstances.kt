@@ -6,7 +6,8 @@ data class DiscoveredValetudoInstance (
     val manufacturer: String,
     val valetudoVersion: String,
     val host: String,
-    val serviceName: String
+    val serviceName: String,
+    val name: String
 ) {
     override fun toString(): String = "$manufacturer $model ($host)"
 }

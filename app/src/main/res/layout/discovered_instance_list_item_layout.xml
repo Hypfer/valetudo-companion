@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/manufacturerAndModel"
+        android:id="@+id/label"
         android:layout_width="380dp"
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
@@ -15,7 +15,7 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="manufacturerAndModel" />
+        tools:text="label" />
 
     <TextView
         android:id="@+id/valetudoVersion"
@@ -26,7 +26,7 @@
         android:gravity="bottom"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
+        app:layout_constraintTop_toBottomOf="@+id/label"
         tools:text="valetudoVersion" />
 
     <TextView
@@ -38,7 +38,7 @@
         android:gravity="bottom"
         android:textStyle="italic"
         app:layout_constraintStart_toEndOf="@+id/valetudoVersion"
-        app:layout_constraintTop_toBottomOf="@+id/manufacturerAndModel"
+        app:layout_constraintTop_toBottomOf="@+id/label"
         tools:text="uniqueIdentifier" />
 
     <TextView

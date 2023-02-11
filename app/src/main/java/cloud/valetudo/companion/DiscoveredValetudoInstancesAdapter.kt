@@ -17,23 +17,31 @@ class DiscoveredValetudoInstancesAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val instance = getItem(position)
-        var newView = convertView
+        val newView = convertView ?: LayoutInflater.from(context).inflate(R.layout.discovered_instance_list_item_layout, parent, false)
 
-        if (newView == null) {
-            newView = LayoutInflater.from(context).inflate(R.layout.discovered_instance_list_item_layout, parent, false)
+        if (instance == null) {
+            return newView;
         }
 
-        val manufacturerAndModel = newView!!.findViewById<TextView>(R.id.manufacturerAndModel)
+        val label = newView.findViewById<TextView>(R.id.label)
         val valetudoVersion = newView.findViewById<TextView>(R.id.valetudoVersion)
         val uniqueIdentifier = newView.findViewById<TextView>(R.id.uniqueIdentifier)
         val domainAndHost = newView.findViewById<TextView>(R.id.domainAndHost)
 
-        manufacturerAndModel.text = context.getString(
-            R.string.discovered_valetudo_instance_list_item_manufacturer_and_model,
+        if (instance.name.isNotEmpty()) {
+            label.text = context.getString(
+                R.string.discovered_valetudo_instance_list_item_name,
 
-            instance!!.manufacturer,
-            instance.model
-        )
+                instance.name
+            )
+        } else {
+            label.text = context.getString(
+                R.string.discovered_valetudo_instance_list_item_manufacturer_and_model,
+
+                instance.manufacturer,
+                instance.model
+            )
+        }
 
         valetudoVersion.text = context.getString(
             R.string.discovered_valetudo_instance_list_item_valetudo_version,
