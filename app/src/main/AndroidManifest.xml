@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         android:fullBackupContent="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

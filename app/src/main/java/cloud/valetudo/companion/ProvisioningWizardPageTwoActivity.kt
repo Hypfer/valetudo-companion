@@ -12,15 +12,13 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import cloud.valetudo.companion.activities.main.MainActivity
 import cloud.valetudo.companion.databinding.ActivityProvisioningPage2Binding
 
 
 class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
-
-    private var mRobotSSIDs = ArrayList<ScanResult>()
     private var mConnectivityManager: ConnectivityManager? = null
     private var mNetworkCallback : NetworkCallback? = null
 
@@ -66,9 +64,6 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
         val helpText = binding.noSsidsFoundHint
 
         val discoveredList = binding.wizardPage2WifiNetworkList
-        val itemsAdapter = DiscoveredAPsAdapter(this, R.layout.discovered_ap_list_item_layout, mRobotSSIDs)
-        discoveredList.adapter = itemsAdapter
-
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         mConnectivityManager = getSystemService(ConnectivityManager::class.java)
@@ -81,39 +76,6 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             }
 
             return
-        }
-
-        fun updateScanResults() {
-            val results = wifiManager.scanResults
-            val filteredResults = results.filter {
-                it.SSID.startsWith("roborock-vacuum-") ||
-                it.SSID.startsWith("rockrobo-vacuum-") ||
-                it.SSID.startsWith("viomi-vacuum-") ||
-                it.SSID.startsWith("dreame-vacuum-")
-            }
-
-            runOnUiThread {
-                mRobotSSIDs.clear()
-                mRobotSSIDs.addAll(filteredResults)
-
-                if (filteredResults.isNotEmpty()) {
-                    helpText.visibility = View.GONE
-                } else {
-                    helpText.visibility = View.VISIBLE
-                }
-
-                itemsAdapter.notifyDataSetChanged()
-            }
-
-        }
-
-        updateScanResults()
-
-        @Suppress("DEPRECATION")
-        binding.wizardPage2ScanButton.setOnClickListener {
-            wifiManager.startScan()
-
-            updateScanResults()
         }
 
         fun navigateToProvisioningActivity(newNetworkId: Int? = null, withResult: Boolean = false) {
@@ -135,10 +97,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
         }
 
-
-        discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val result = mRobotSSIDs[position]
-
+        val clickListener = { result: ScanResult ->
             @Suppress("DEPRECATION")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val builder = WifiNetworkSpecifier.Builder()
@@ -206,5 +165,37 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                 navigateToProvisioningActivity(newNetworkId)
             }
         }
+
+        val itemsAdapter = ScanResultAdapter(clickListener)
+        discoveredList.adapter = itemsAdapter
+
+        fun updateScanResults() {
+            val results = wifiManager.scanResults
+            val filteredResults = results.filter {
+                it.SSID.startsWith("roborock-vacuum-") ||
+                        it.SSID.startsWith("rockrobo-vacuum-") ||
+                        it.SSID.startsWith("viomi-vacuum-") ||
+                        it.SSID.startsWith("dreame-vacuum-")
+            }
+
+            runOnUiThread {
+                itemsAdapter.scanResults = results
+
+                if (filteredResults.isNotEmpty()) {
+                    helpText.visibility = View.GONE
+                } else {
+                    helpText.visibility = View.VISIBLE
+                }
+            }
+
+        }
+
+        @Suppress("DEPRECATION")
+        binding.wizardPage2ScanButton.setOnClickListener {
+            wifiManager.startScan()
+            updateScanResults()
+        }
+
+        updateScanResults()
     }
 }

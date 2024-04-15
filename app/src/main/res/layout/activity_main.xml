@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.main.MainActivity">
 
     <ImageView
         android:id="@+id/valetudo_logo"
@@ -28,12 +28,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/valetudo_logo" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/discovered_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/discovered_instance_list_item_layout"
         android:fadeScrollbars="false"
         app:layout_constraintBottom_toTopOf="@+id/enterProvisioningActivityButton"
         app:layout_constraintEnd_toEndOf="parent"

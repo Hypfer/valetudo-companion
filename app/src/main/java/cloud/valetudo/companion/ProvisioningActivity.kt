@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import cloud.valetudo.companion.databinding.ActivityProvisioningBinding
+import cloud.valetudo.companion.activities.main.MainActivity
 import kotlin.concurrent.thread
 
 
