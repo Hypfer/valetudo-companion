@@ -1,6 +1,6 @@
 package cloud.valetudo.companion
 
-data class DiscoveredUnprovisionedValetudoInstance (
+data class DiscoveredUnprovisionedValetudoInstance(
     val model: String,
     val manufacturer: String,
     val valetudoVersion: String,

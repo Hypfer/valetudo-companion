@@ -3,7 +3,7 @@ package cloud.valetudo.companion.activities.main
 import android.net.Uri
 import android.net.nsd.NsdServiceInfo
 
-data class DiscoveredValetudoInstance (
+data class DiscoveredValetudoInstance(
     val id: String,
     val model: String,
     val manufacturer: String,

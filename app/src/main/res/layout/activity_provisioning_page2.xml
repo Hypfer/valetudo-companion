@@ -23,11 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="96dp"
-        tools:listitem="@layout/discovered_ap_list_item_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/discovered_ap_list_item_layout" />
 
     <TextView
         android:id="@+id/wizard_page_2_hint"
@@ -44,8 +44,8 @@
         android:id="@+id/wizard_page_2_scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/wizard_page_2_scan_button"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

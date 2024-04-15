@@ -20,6 +20,7 @@ class ScanResultAdapter(
             internalResults.addAll(value)
             notifyDataSetChanged()
         }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DiscoveredApListItemLayoutBinding.inflate(inflater, parent, false)

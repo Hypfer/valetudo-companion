@@ -20,7 +20,7 @@ val PERMISSIONS_REQUIRED = arrayOf(
 const val PERMISSION_REQUEST_CODE = 1234
 
 
-class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
+class ProvisioningWizardPageOneActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProvisioningPage1Binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,8 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
         setContentView(view)
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
-        val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
+        val connectivityManager: ConnectivityManager? =
+            getSystemService(ConnectivityManager::class.java)
         val provisioningHelper: ValetudoProvisioningHelper
 
         if (wifiManager != null && connectivityManager != null) {
@@ -39,7 +40,10 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
                 connectivityManager
             )
         } else {
-            Log.e("ProvisioningWizardPageOneActivity", "Unable to create new provisioningHelper due to missing wifi- or connectivityManager")
+            Log.e(
+                "ProvisioningWizardPageOneActivity",
+                "Unable to create new provisioningHelper due to missing wifi- or connectivityManager"
+            )
 
             runOnUiThread {
                 this.finish()
@@ -50,14 +54,22 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
 
         binding.wizardPage1NextButton.setOnClickListener {
             if (
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PERMISSION_GRANTED
             ) {
-                val wizardPageTwoIntent = Intent(this, ProvisioningWizardPageTwoActivity::class.java)
+                val wizardPageTwoIntent =
+                    Intent(this, ProvisioningWizardPageTwoActivity::class.java)
 
                 startActivity(wizardPageTwoIntent)
             } else {
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(
+                    this,
                     PERMISSIONS_REQUIRED,
                     PERMISSION_REQUEST_CODE
                 )
@@ -71,7 +83,11 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
                 startActivity(provisioningIntent)
             } else {
                 runOnUiThread {
-                    Toast.makeText(this@ProvisioningWizardPageOneActivity, "No you're not", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ProvisioningWizardPageOneActivity,
+                        "No you're not",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -89,7 +105,8 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
                 permissions contentEquals PERMISSIONS_REQUIRED &&
                 grantResults.all { it == PERMISSION_GRANTED }
             ) {
-                val wizardPageTwoIntent = Intent(this, ProvisioningWizardPageTwoActivity::class.java)
+                val wizardPageTwoIntent =
+                    Intent(this, ProvisioningWizardPageTwoActivity::class.java)
 
                 startActivity(wizardPageTwoIntent)
             } else {

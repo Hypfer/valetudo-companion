@@ -18,6 +18,7 @@ class ValetudoInstancesRepository(
                 when (value) {
                     is DiscoveryEvent.ServiceFound ->
                         instances.addByName(value.service)
+
                     is DiscoveryEvent.ServiceLost ->
                         instances.removeByName(value.service)
                 }

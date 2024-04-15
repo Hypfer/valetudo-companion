@@ -3,8 +3,12 @@ package cloud.valetudo.companion
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.*
+import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
+import android.net.LinkProperties
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
@@ -18,9 +22,9 @@ import cloud.valetudo.companion.activities.main.MainActivity
 import cloud.valetudo.companion.databinding.ActivityProvisioningPage2Binding
 
 
-class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
+class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
     private var mConnectivityManager: ConnectivityManager? = null
-    private var mNetworkCallback : NetworkCallback? = null
+    private var mNetworkCallback: NetworkCallback? = null
 
     private lateinit var binding: ActivityProvisioningPage2Binding
 
@@ -31,7 +35,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
         if (mNetworkCallback != null && mConnectivityManager != null) {
             try {
                 mConnectivityManager!!.unregisterNetworkCallback(mNetworkCallback!!)
-            } catch(ex: Exception) {
+            } catch (ex: Exception) {
                 Log.e("ProvisioningWizardPageTwoActivity", ex.toString())
             }
         }
@@ -48,7 +52,11 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             // Return to the previous activity if the user revoked the permission while we were in the background
             runOnUiThread {
                 this.finish()
@@ -82,7 +90,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
 
             if (newNetworkId != null) {
-               provisioningIntent.putExtra("newNetworkId", newNetworkId)
+                provisioningIntent.putExtra("newNetworkId", newNetworkId)
             }
 
             provisioningIntent.putExtra("withResult", withResult)
@@ -122,14 +130,20 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                         network: Network,
                         networkCapabilities: NetworkCapabilities
                     ) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onCapabilitiesChanged()")
+                        Log.d(
+                            "ProvisioningWizardPageTwoActivity",
+                            "requestNetwork onCapabilitiesChanged()"
+                        )
                     }
 
                     override fun onLinkPropertiesChanged(
                         network: Network,
                         linkProperties: LinkProperties
                     ) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onLinkPropertiesChanged()")
+                        Log.d(
+                            "ProvisioningWizardPageTwoActivity",
+                            "requestNetwork onLinkPropertiesChanged()"
+                        )
                     }
 
                     override fun onLosing(network: Network, maxMsToLive: Int) {
