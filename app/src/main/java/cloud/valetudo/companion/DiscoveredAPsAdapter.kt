@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import cloud.valetudo.companion.databinding.DiscoveredApListItemLayoutBinding
+import cloud.valetudo.companion.databinding.DiscoveredInstanceListItemLayoutBinding
 import kotlin.collections.ArrayList
 
 class DiscoveredAPsAdapter(
@@ -17,16 +19,13 @@ class DiscoveredAPsAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val instance = getItem(position)
-        var newView = convertView
 
-        if (newView == null) {
-            newView = LayoutInflater.from(context).inflate(R.layout.discovered_ap_list_item_layout, parent, false)
-        }
+        val binding: DiscoveredApListItemLayoutBinding =
+            if (convertView != null) DiscoveredApListItemLayoutBinding.bind(convertView)
+            else DiscoveredApListItemLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
 
-        val ssid = newView!!.findViewById<TextView>(R.id.discovered_ap_ssid)
+        binding.discoveredApSsid.text = instance!!.SSID
 
-        ssid.text = instance!!.SSID
-
-        return newView
+        return binding.root
     }
 }

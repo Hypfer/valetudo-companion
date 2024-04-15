@@ -7,23 +7,27 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import cloud.valetudo.companion.databinding.ActivityProvisioningPage1Binding
 
 val PERMISSIONS_REQUIRED = arrayOf(
     Manifest.permission.ACCESS_COARSE_LOCATION,
     Manifest.permission.ACCESS_FINE_LOCATION
-);
-const val PERMISSION_REQUEST_CODE = 1234;
+)
+const val PERMISSION_REQUEST_CODE = 1234
 
 
 class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
+    private lateinit var binding: ActivityProvisioningPage1Binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_provisioning_page1)
+
+        binding = ActivityProvisioningPage1Binding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
@@ -44,11 +48,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
             return
         }
 
-        val nextButton = findViewById<Button>(R.id.wizard_page_1_next_button)
-        val skipButton = findViewById<Button>(R.id.wizard_page_1_skip_button)
-
-
-        nextButton.setOnClickListener {
+        binding.wizardPage1NextButton.setOnClickListener {
             if (
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
@@ -64,7 +64,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
             }
         }
 
-        skipButton.setOnClickListener {
+        binding.wizardPage1SkipButton.setOnClickListener {
             if (provisioningHelper.getRobotWifiNetwork() != null) {
                 val provisioningIntent = Intent(this, ProvisioningActivity::class.java)
 
@@ -82,7 +82,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
         permissions: Array<String?>,
         grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (

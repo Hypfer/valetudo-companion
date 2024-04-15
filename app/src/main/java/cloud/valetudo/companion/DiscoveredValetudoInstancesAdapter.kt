@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import cloud.valetudo.companion.databinding.DiscoveredInstanceListItemLayoutBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -17,25 +18,23 @@ class DiscoveredValetudoInstancesAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val instance = getItem(position)
-        val newView = convertView ?: LayoutInflater.from(context).inflate(R.layout.discovered_instance_list_item_layout, parent, false)
+
+        val binding: DiscoveredInstanceListItemLayoutBinding =
+            if (convertView != null) DiscoveredInstanceListItemLayoutBinding.bind(convertView)
+            else DiscoveredInstanceListItemLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
 
         if (instance == null) {
-            return newView;
+            return binding.root
         }
 
-        val label = newView.findViewById<TextView>(R.id.label)
-        val valetudoVersion = newView.findViewById<TextView>(R.id.valetudoVersion)
-        val uniqueIdentifier = newView.findViewById<TextView>(R.id.uniqueIdentifier)
-        val domainAndHost = newView.findViewById<TextView>(R.id.domainAndHost)
-
         if (instance.name.isNotEmpty()) {
-            label.text = context.getString(
+            binding.label.text = context.getString(
                 R.string.discovered_valetudo_instance_list_item_name,
 
                 instance.name
             )
         } else {
-            label.text = context.getString(
+            binding.label.text = context.getString(
                 R.string.discovered_valetudo_instance_list_item_manufacturer_and_model,
 
                 instance.manufacturer,
@@ -43,21 +42,21 @@ class DiscoveredValetudoInstancesAdapter(
             )
         }
 
-        valetudoVersion.text = context.getString(
+        binding.valetudoVersion.text = context.getString(
             R.string.discovered_valetudo_instance_list_item_valetudo_version,
 
             instance.valetudoVersion
         )
 
-        uniqueIdentifier.text = instance.id
+        binding.uniqueIdentifier.text = instance.id
 
-        domainAndHost.text = context.getString(
+        binding.domainAndHost.text = context.getString(
             R.string.discovered_valetudo_instance_list_item_domain_and_host,
 
             instance.id.lowercase(Locale.getDefault()),
             instance.host
         )
 
-        return newView
+        return binding.root
     }
 }

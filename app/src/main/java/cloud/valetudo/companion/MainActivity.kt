@@ -12,13 +12,14 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import cloud.valetudo.companion.databinding.ActivityMainBinding
 import java.util.concurrent.Semaphore
 import kotlin.concurrent.thread
 
@@ -30,10 +31,15 @@ class MainActivity : AppCompatActivity() {
     private var mValetudoInstances = ArrayList<DiscoveredValetudoInstance>()
     private val resolveSemaphore = Semaphore(1)
 
+    private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         val itemsAdapter = DiscoveredValetudoInstancesAdapter(this, R.layout.discovered_instance_list_item_layout, mValetudoInstances)
 
@@ -66,11 +72,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupUIEventHandlers(itemsAdapter: DiscoveredValetudoInstancesAdapter) {
-        val discoveredList = findViewById<ListView>(R.id.discovered_list)
-        val provisionButton = findViewById<FloatingActionButton>(R.id.enterProvisioningActivityButton)
+        val discoveredList = binding.discoveredList
 
         discoveredList.adapter = itemsAdapter
-
 
         discoveredList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val instance = mValetudoInstances[position]
@@ -123,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-        provisionButton.setOnClickListener {
+        binding.enterProvisioningActivityButton.setOnClickListener {
             val provisioningIntent = Intent(this, ProvisioningWizardPageOneActivity::class.java)
 
             startActivity(provisioningIntent)
@@ -213,11 +217,8 @@ class MainActivity : AppCompatActivity() {
 
                     if (itemsAdapter.isEmpty) {
                         runOnUiThread {
-                            val mainText = findViewById<TextView>(R.id.main_text)
-                            val helpText = findViewById<TextView>(R.id.help_text)
-
-                            mainText.text = resources.getString(R.string.found_devices)
-                            helpText.visibility = View.GONE
+                            binding.mainText.text = resources.getString(R.string.found_devices)
+                            binding.helpText.visibility = View.GONE
                         }
                     }
 
@@ -252,7 +253,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enableEgg() {
-        val icon = findViewById<ImageView>(R.id.valetudo_logo)
+        val icon = binding.valetudoLogo
         var iconClicks = 0
 
         if ((1..100).random() == 42) {

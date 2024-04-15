@@ -4,26 +4,18 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.*
+import android.net.ConnectivityManager.NetworkCallback
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
-import android.net.Network
-import android.net.LinkProperties
-import android.net.NetworkCapabilities
-import android.net.ConnectivityManager
-import android.net.ConnectivityManager.NetworkCallback
 import android.view.View
-import android.widget.TextView
+import android.widget.AdapterView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import java.lang.Exception
-import kotlin.collections.ArrayList
+import cloud.valetudo.companion.databinding.ActivityProvisioningPage2Binding
 
 
 class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
@@ -31,6 +23,8 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
     private var mRobotSSIDs = ArrayList<ScanResult>()
     private var mConnectivityManager: ConnectivityManager? = null
     private var mNetworkCallback : NetworkCallback? = null
+
+    private lateinit var binding: ActivityProvisioningPage2Binding
 
     @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,11 +59,13 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
             return
         }
 
-        setContentView(R.layout.activity_provisioning_page2)
+        binding = ActivityProvisioningPage2Binding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val helpText = findViewById<TextView>(R.id.no_ssids_found_hint)
+        val helpText = binding.noSsidsFoundHint
 
-        val discoveredList = findViewById<ListView>(R.id.wizard_page_2_wifi_network_list)
+        val discoveredList = binding.wizardPage2WifiNetworkList
         val itemsAdapter = DiscoveredAPsAdapter(this, R.layout.discovered_ap_list_item_layout, mRobotSSIDs)
         discoveredList.adapter = itemsAdapter
 
@@ -113,10 +109,8 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
         updateScanResults()
 
-        val scanButton = findViewById<Button>(R.id.wizard_page_2_scan_button)
-
         @Suppress("DEPRECATION")
-        scanButton.setOnClickListener {
+        binding.wizardPage2ScanButton.setOnClickListener {
             wifiManager.startScan()
 
             updateScanResults()

@@ -8,15 +8,19 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import cloud.valetudo.companion.databinding.ActivityProvisioningBinding
 import kotlin.concurrent.thread
 
 
-
-
 class ProvisioningActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityProvisioningBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_provisioning)
+
+        binding = ActivityProvisioningBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
 
         var newNetworkId: Int? = null
@@ -60,16 +64,16 @@ class ProvisioningActivity : AppCompatActivity() {
 
         var foundRobot : DiscoveredUnprovisionedValetudoInstance? = null
 
-        val helpText = findViewById<TextView>(R.id.no_valetudo_found_hint)
+        val helpText = binding.noValetudoFoundHint
 
-        val scanButton = findViewById<Button>(R.id.scan_button)
-        val connectButton = findViewById<Button>(R.id.connect_button)
+        val scanButton = binding.scanButton
+        val connectButton = binding.connectButton
 
-        val foundRobotLabel = findViewById<TextView>(R.id.found_robot_label)
-        val provisioningInputs = findViewById<LinearLayout>(R.id.provisioning_inputs)
+        val foundRobotLabel = binding.foundRobotLabel
+        val provisioningInputs = binding.provisioningInputs
 
-        val ssidInput = findViewById<EditText>(R.id.input_ssid)
-        val passwordInput = findViewById<EditText>(R.id.input_password)
+        val ssidInput = binding.inputSsid
+        val passwordInput = binding.inputPassword
 
         fun scanForValetudo() {
             thread {
