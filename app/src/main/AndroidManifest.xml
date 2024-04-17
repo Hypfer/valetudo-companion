@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Valetudo"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
         <activity
             android:name=".activities.main.MainActivity"
             android:exported="true">
@@ -30,14 +30,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.provisioning.ProvisioningWizardPageOneActivity"
-            android:exported="false"></activity>
+            android:name=".activities.connection.ConnectionWizardPageOneActivity"
+            android:exported="false" />
         <activity
-            android:name=".activities.provisioning.ProvisioningWizardPageTwoActivity"
-            android:exported="false"></activity>
+            android:name=".activities.connection.ConnectionWizardPageTwoActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.provisioning.ProvisioningActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

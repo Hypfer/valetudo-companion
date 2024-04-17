@@ -1,4 +1,4 @@
-package cloud.valetudo.companion.activities.provisioning
+package cloud.valetudo.companion.activities.connection
 
 import android.Manifest
 import android.content.Intent
@@ -19,14 +19,15 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import cloud.valetudo.companion.activities.main.MainActivity
-import cloud.valetudo.companion.databinding.ActivityProvisioningPage2Binding
+import cloud.valetudo.companion.activities.provisioning.ProvisioningActivity
+import cloud.valetudo.companion.databinding.ActivityConnectionWizardPage2Binding
 
 
-class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
+class ConnectionWizardPageTwoActivity : AppCompatActivity() {
     private var mConnectivityManager: ConnectivityManager? = null
     private var mNetworkCallback: NetworkCallback? = null
 
-    private lateinit var binding: ActivityProvisioningPage2Binding
+    private lateinit var binding: ActivityConnectionWizardPage2Binding
 
     @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -36,7 +37,7 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
             try {
                 mConnectivityManager!!.unregisterNetworkCallback(mNetworkCallback!!)
             } catch (ex: Exception) {
-                Log.e("ProvisioningWizardPageTwoActivity", ex.toString())
+                Log.e("ConnectionWizardPageTwoActivity", ex.toString())
             }
         }
 
@@ -65,7 +66,7 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
             return
         }
 
-        binding = ActivityProvisioningPage2Binding.inflate(layoutInflater)
+        binding = ActivityConnectionWizardPage2Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -77,7 +78,7 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
         mConnectivityManager = getSystemService(ConnectivityManager::class.java)
 
         if (wifiManager == null || mConnectivityManager == null) {
-            Log.e("ProvisioningWizardPageTwoActivity", "Missing wifi- or connectivityManager")
+            Log.e("ConnectionWizardPageTwoActivity", "Missing wifi- or connectivityManager")
 
             runOnUiThread {
                 this.finish()
@@ -121,7 +122,7 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
 
                 mNetworkCallback = object : NetworkCallback() {
                     override fun onAvailable(network: Network) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onAvailable()")
+                        Log.d("ConnectionWizardPageTwoActivity", "requestNetwork onAvailable()")
 
                         navigateToProvisioningActivity(null, true)
                     }
@@ -131,7 +132,7 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
                         networkCapabilities: NetworkCapabilities
                     ) {
                         Log.d(
-                            "ProvisioningWizardPageTwoActivity",
+                            "ConnectionWizardPageTwoActivity",
                             "requestNetwork onCapabilitiesChanged()"
                         )
                     }
@@ -141,17 +142,17 @@ class ProvisioningWizardPageTwoActivity : AppCompatActivity() {
                         linkProperties: LinkProperties
                     ) {
                         Log.d(
-                            "ProvisioningWizardPageTwoActivity",
+                            "ConnectionWizardPageTwoActivity",
                             "requestNetwork onLinkPropertiesChanged()"
                         )
                     }
 
                     override fun onLosing(network: Network, maxMsToLive: Int) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onLosing()")
+                        Log.d("ConnectionWizardPageTwoActivity", "requestNetwork onLosing()")
                     }
 
                     override fun onLost(network: Network) {
-                        Log.d("ProvisioningWizardPageTwoActivity", "requestNetwork onLost()")
+                        Log.d("ConnectionWizardPageTwoActivity", "requestNetwork onLost()")
                     }
                 }
 

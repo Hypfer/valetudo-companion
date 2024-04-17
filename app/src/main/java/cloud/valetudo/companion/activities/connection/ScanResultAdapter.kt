@@ -1,4 +1,4 @@
-package cloud.valetudo.companion.activities.provisioning
+package cloud.valetudo.companion.activities.connection
 
 import android.net.wifi.ScanResult
 import android.view.LayoutInflater

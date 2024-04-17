@@ -1,4 +1,4 @@
-package cloud.valetudo.companion.activities.provisioning
+package cloud.valetudo.companion.activities.connection
 
 import android.Manifest
 import android.content.Intent
@@ -11,16 +11,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import cloud.valetudo.companion.databinding.ActivityProvisioningPage1Binding
+import cloud.valetudo.companion.activities.provisioning.ProvisioningActivity
+import cloud.valetudo.companion.databinding.ActivityConnectionWizardPage1Binding
 import cloud.valetudo.companion.utils.ValetudoProvisioningHelper
 
 
-class ProvisioningWizardPageOneActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityProvisioningPage1Binding
+class ConnectionWizardPageOneActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityConnectionWizardPage1Binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityProvisioningPage1Binding.inflate(layoutInflater)
+        binding = ActivityConnectionWizardPage1Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -36,7 +37,7 @@ class ProvisioningWizardPageOneActivity : AppCompatActivity() {
             )
         } else {
             Log.e(
-                "ProvisioningWizardPageOneActivity",
+                "ConnectionWizardPageOneActivity",
                 "Unable to create new provisioningHelper due to missing wifi- or connectivityManager"
             )
 
@@ -59,7 +60,7 @@ class ProvisioningWizardPageOneActivity : AppCompatActivity() {
                 ) == PERMISSION_GRANTED
             ) {
                 val wizardPageTwoIntent =
-                    Intent(this, ProvisioningWizardPageTwoActivity::class.java)
+                    Intent(this, ConnectionWizardPageTwoActivity::class.java)
 
                 startActivity(wizardPageTwoIntent)
             } else {
@@ -79,7 +80,7 @@ class ProvisioningWizardPageOneActivity : AppCompatActivity() {
             } else {
                 runOnUiThread {
                     Toast.makeText(
-                        this@ProvisioningWizardPageOneActivity,
+                        this@ConnectionWizardPageOneActivity,
                         "No you're not",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -101,13 +102,13 @@ class ProvisioningWizardPageOneActivity : AppCompatActivity() {
                 grantResults.all { it == PERMISSION_GRANTED }
             ) {
                 val wizardPageTwoIntent =
-                    Intent(this, ProvisioningWizardPageTwoActivity::class.java)
+                    Intent(this, ConnectionWizardPageTwoActivity::class.java)
 
                 startActivity(wizardPageTwoIntent)
             } else {
                 runOnUiThread {
                     Toast.makeText(
-                        this@ProvisioningWizardPageOneActivity,
+                        this@ConnectionWizardPageOneActivity,
                         "Wi-Fi SSID scanning requires the ACCESS_FINE_LOCATION permission",
                         Toast.LENGTH_SHORT
                     ).show()

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
-import cloud.valetudo.companion.activities.provisioning.ProvisioningWizardPageOneActivity
+import cloud.valetudo.companion.activities.connection.ConnectionWizardPageOneActivity
 import cloud.valetudo.companion.R
 import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import cloud.valetudo.companion.databinding.ActivityMainBinding
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.enterProvisioningActivityButton.setOnClickListener(::startProvisioning)
+        binding.enterProvisioningActivityButton.setOnClickListener(::startConnecting)
 
         val instancesAdapter = ProvisionedValetudoInstancesAdapter(
             ::launchInAppBrowser,
@@ -105,10 +105,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startProvisioning(view: View) {
+    private fun startConnecting(@Suppress("UNUSED_PARAMETER") view: View) {
         val provisioningIntent = Intent(
             this,
-            ProvisioningWizardPageOneActivity::class.java
+            ConnectionWizardPageOneActivity::class.java
         )
         startActivity(provisioningIntent)
     }
