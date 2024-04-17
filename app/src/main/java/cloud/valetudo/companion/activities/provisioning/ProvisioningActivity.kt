@@ -1,4 +1,4 @@
-package cloud.valetudo.companion
+package cloud.valetudo.companion.activities.provisioning
 
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -6,17 +6,25 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cloud.valetudo.companion.R
+import cloud.valetudo.companion.activities.main.MainActivity
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
+import cloud.valetudo.companion.databinding.ActivityProvisioningBinding
+import cloud.valetudo.companion.utils.ValetudoProvisioningHelper
 import kotlin.concurrent.thread
 
 
-
-
 class ProvisioningActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityProvisioningBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_provisioning)
+
+        binding = ActivityProvisioningBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
 
         var newNetworkId: Int? = null
@@ -26,9 +34,13 @@ class ProvisioningActivity : AppCompatActivity() {
             try {
                 newNetworkId = intent.extras!!["newNetworkId"] as Int?
                 withResult = intent.extras!!["withResult"] as Boolean
-            } catch(ex: Exception) {
+            } catch (ex: Exception) {
                 runOnUiThread {
-                    Toast.makeText(this@ProvisioningActivity, "Received invalid intent extras", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@ProvisioningActivity,
+                        "Received invalid intent extras",
+                        Toast.LENGTH_LONG
+                    ).show()
 
                     this.finish()
                 }
@@ -38,9 +50,9 @@ class ProvisioningActivity : AppCompatActivity() {
         }
 
 
-
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
-        val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
+        val connectivityManager: ConnectivityManager? =
+            getSystemService(ConnectivityManager::class.java)
         val provisioningHelper: ValetudoProvisioningHelper
 
         if (wifiManager != null && connectivityManager != null) {
@@ -49,7 +61,10 @@ class ProvisioningActivity : AppCompatActivity() {
                 connectivityManager
             )
         } else {
-            Log.e("provisioningActivity", "Unable to create new provisioningHelper due to missing wifi- or connectivityManager")
+            Log.e(
+                "provisioningActivity",
+                "Unable to create new provisioningHelper due to missing wifi- or connectivityManager"
+            )
 
             runOnUiThread {
                 this.finish()
@@ -58,18 +73,18 @@ class ProvisioningActivity : AppCompatActivity() {
             return
         }
 
-        var foundRobot : DiscoveredUnprovisionedValetudoInstance? = null
+        var foundRobot: DiscoveredValetudoInstance.Unprovisioned? = null
 
-        val helpText = findViewById<TextView>(R.id.no_valetudo_found_hint)
+        val helpText = binding.noValetudoFoundHint
 
-        val scanButton = findViewById<Button>(R.id.scan_button)
-        val connectButton = findViewById<Button>(R.id.connect_button)
+        val scanButton = binding.scanButton
+        val connectButton = binding.connectButton
 
-        val foundRobotLabel = findViewById<TextView>(R.id.found_robot_label)
-        val provisioningInputs = findViewById<LinearLayout>(R.id.provisioning_inputs)
+        val foundRobotLabel = binding.foundRobotLabel
+        val provisioningInputs = binding.provisioningInputs
 
-        val ssidInput = findViewById<EditText>(R.id.input_ssid)
-        val passwordInput = findViewById<EditText>(R.id.input_password)
+        val ssidInput = binding.inputSsid
+        val passwordInput = binding.inputPassword
 
         fun scanForValetudo() {
             thread {
@@ -96,26 +111,33 @@ class ProvisioningActivity : AppCompatActivity() {
                         provisioningInputs.visibility = View.INVISIBLE
                         helpText.visibility = View.VISIBLE
 
-                        Toast.makeText(this@ProvisioningActivity, "Scan finished without results", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@ProvisioningActivity,
+                            "Scan finished without results",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
         }
 
         scanButton.setOnClickListener {
-           scanForValetudo()
+            scanForValetudo()
         }
 
         scanForValetudo()
 
         connectButton.setOnClickListener {
-            if(foundRobot != null) {
+            if (foundRobot != null) {
                 thread {
                     runOnUiThread {
                         connectButton.isEnabled = false
                     }
 
-                    val connectResult = provisioningHelper.provisionValetudo(ssidInput.text.toString(), passwordInput.text.toString())
+                    val connectResult = provisioningHelper.provisionValetudo(
+                        ssidInput.text.toString(),
+                        passwordInput.text.toString()
+                    )
 
                     if (connectResult == 200) {
 
@@ -125,11 +147,16 @@ class ProvisioningActivity : AppCompatActivity() {
                         }
 
                         runOnUiThread {
-                            Toast.makeText(this@ProvisioningActivity, "Provisioning successful", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@ProvisioningActivity,
+                                "Provisioning successful",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                             if (!withResult) {
                                 val intent = Intent(this, MainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
                                 startActivity(intent)
                             } else {
@@ -142,7 +169,11 @@ class ProvisioningActivity : AppCompatActivity() {
                         }
                     } else {
                         runOnUiThread {
-                            Toast.makeText(this@ProvisioningActivity, "Wifi Provisioning failed with code $connectResult", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this@ProvisioningActivity,
+                                "Wifi Provisioning failed with code $connectResult",
+                                Toast.LENGTH_LONG
+                            ).show()
 
                             connectButton.isEnabled = true
                         }
@@ -150,7 +181,11 @@ class ProvisioningActivity : AppCompatActivity() {
                 }
             } else {
                 runOnUiThread {
-                    Toast.makeText(this@ProvisioningActivity, "Missing foundRobot", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@ProvisioningActivity,
+                        "Missing foundRobot",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
