@@ -1,10 +1,11 @@
-package cloud.valetudo.companion
+package cloud.valetudo.companion.utils
 
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.util.Log
+import cloud.valetudo.companion.activities.provisioning.DiscoveredUnprovisionedValetudoInstance
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -31,13 +32,11 @@ class ValetudoProvisioningHelper(
 
                 val valetudoVersionJSON = this.getJSON(valetudoVersionConnection)
 
-
                 val valetudoRobotInfoConnection =
                     wifiNetwork.openConnection(URL("http://${this.gatewayIp}/api/v2/robot"))
                 valetudoRobotInfoConnection.connect()
 
                 val valetudoRobotJSON = this.getJSON(valetudoRobotInfoConnection)
-
 
                 Log.d("ValetudoVersion", valetudoVersionJSON.toString())
                 Log.d("RobotInfo", valetudoRobotJSON.toString())

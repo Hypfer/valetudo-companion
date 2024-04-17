@@ -1,4 +1,4 @@
-package cloud.valetudo.companion
+package cloud.valetudo.companion.activities.provisioning
 
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -8,8 +8,10 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cloud.valetudo.companion.R
 import cloud.valetudo.companion.activities.main.MainActivity
 import cloud.valetudo.companion.databinding.ActivityProvisioningBinding
+import cloud.valetudo.companion.utils.ValetudoProvisioningHelper
 import kotlin.concurrent.thread
 
 

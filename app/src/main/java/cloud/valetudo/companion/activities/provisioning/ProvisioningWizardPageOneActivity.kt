@@ -1,4 +1,4 @@
-package cloud.valetudo.companion
+package cloud.valetudo.companion.activities.provisioning
 
 import android.Manifest
 import android.content.Intent
@@ -12,12 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import cloud.valetudo.companion.databinding.ActivityProvisioningPage1Binding
-
-val PERMISSIONS_REQUIRED = arrayOf(
-    Manifest.permission.ACCESS_COARSE_LOCATION,
-    Manifest.permission.ACCESS_FINE_LOCATION
-)
-const val PERMISSION_REQUEST_CODE = 1234
+import cloud.valetudo.companion.utils.ValetudoProvisioningHelper
 
 
 class ProvisioningWizardPageOneActivity : AppCompatActivity() {
@@ -119,5 +114,14 @@ class ProvisioningWizardPageOneActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 1234
+
+        private val PERMISSIONS_REQUIRED = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 }

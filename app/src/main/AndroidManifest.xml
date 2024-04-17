@@ -30,13 +30,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProvisioningWizardPageOneActivity"
+            android:name=".activities.provisioning.ProvisioningWizardPageOneActivity"
             android:exported="false"></activity>
         <activity
-            android:name=".ProvisioningWizardPageTwoActivity"
+            android:name=".activities.provisioning.ProvisioningWizardPageTwoActivity"
             android:exported="false"></activity>
         <activity
-            android:name=".ProvisioningActivity"
+            android:name=".activities.provisioning.ProvisioningActivity"
             android:exported="false"></activity>
     </application>
 

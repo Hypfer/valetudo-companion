@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
-import cloud.valetudo.companion.ProvisioningWizardPageOneActivity
+import cloud.valetudo.companion.activities.provisioning.ProvisioningWizardPageOneActivity
 import cloud.valetudo.companion.R
 import cloud.valetudo.companion.databinding.ActivityMainBinding
 import cloud.valetudo.companion.utils.setVisibility

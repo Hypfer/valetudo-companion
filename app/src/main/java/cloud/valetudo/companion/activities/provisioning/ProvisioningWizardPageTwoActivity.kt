@@ -1,4 +1,4 @@
-package cloud.valetudo.companion
+package cloud.valetudo.companion.activities.provisioning
 
 import android.Manifest
 import android.content.Intent
