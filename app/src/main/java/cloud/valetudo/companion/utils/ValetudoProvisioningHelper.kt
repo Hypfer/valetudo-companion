@@ -5,7 +5,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.util.Log
-import cloud.valetudo.companion.activities.provisioning.DiscoveredUnprovisionedValetudoInstance
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -20,8 +20,8 @@ class ValetudoProvisioningHelper(
     var wifiManager: WifiManager,
     var connectivityManager: ConnectivityManager
 ) {
-    fun checkForValetudo(): DiscoveredUnprovisionedValetudoInstance? {
-        var discoveredInstance: DiscoveredUnprovisionedValetudoInstance? = null
+    fun checkForValetudo(): DiscoveredValetudoInstance.Unprovisioned? {
+        var discoveredInstance: DiscoveredValetudoInstance.Unprovisioned? = null
         val wifiNetwork = this.getRobotWifiNetwork()
 
         if (wifiNetwork != null) {
@@ -41,12 +41,7 @@ class ValetudoProvisioningHelper(
                 Log.d("ValetudoVersion", valetudoVersionJSON.toString())
                 Log.d("RobotInfo", valetudoRobotJSON.toString())
 
-                discoveredInstance = DiscoveredUnprovisionedValetudoInstance(
-                    valetudoRobotJSON.getString("modelName"),
-                    valetudoRobotJSON.getString("manufacturer"),
-                    valetudoVersionJSON.getString("release"),
-                    this.gatewayIp ?: ""
-                )
+                discoveredInstance = DiscoveredValetudoInstance.Unprovisioned.fromJsonWithHost(valetudoRobotJSON, this.gatewayIp ?: "")
             } catch (ex: Exception) {
                 Log.e("checkForValetudo", ex.toString())
             }

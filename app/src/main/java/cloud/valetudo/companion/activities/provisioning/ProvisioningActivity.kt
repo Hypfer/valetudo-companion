@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cloud.valetudo.companion.R
 import cloud.valetudo.companion.activities.main.MainActivity
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import cloud.valetudo.companion.databinding.ActivityProvisioningBinding
 import cloud.valetudo.companion.utils.ValetudoProvisioningHelper
 import kotlin.concurrent.thread
@@ -72,7 +73,7 @@ class ProvisioningActivity : AppCompatActivity() {
             return
         }
 
-        var foundRobot: DiscoveredUnprovisionedValetudoInstance? = null
+        var foundRobot: DiscoveredValetudoInstance.Unprovisioned? = null
 
         val helpText = binding.noValetudoFoundHint
 

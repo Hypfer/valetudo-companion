@@ -16,6 +16,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
 import cloud.valetudo.companion.activities.provisioning.ProvisioningWizardPageOneActivity
 import cloud.valetudo.companion.R
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import cloud.valetudo.companion.databinding.ActivityMainBinding
 import cloud.valetudo.companion.utils.setVisibility
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.enterProvisioningActivityButton.setOnClickListener(::startProvisioning)
 
-        val instancesAdapter = DiscoveredValetudoInstancesAdapter(
+        val instancesAdapter = ProvisionedValetudoInstancesAdapter(
             ::launchInAppBrowser,
             ::launchExternalBrowser
         )

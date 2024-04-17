@@ -4,18 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cloud.valetudo.companion.R
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import cloud.valetudo.companion.databinding.DiscoveredInstanceListItemLayoutBinding
 import cloud.valetudo.companion.utils.setText
 import java.util.Locale
 
-class DiscoveredValetudoInstancesAdapter(
-    private val onItemClickListener: (DiscoveredValetudoInstance) -> Unit,
-    private val onItemLongClickListener: (DiscoveredValetudoInstance) -> Boolean
-) : RecyclerView.Adapter<DiscoveredValetudoInstancesAdapter.ViewHolder>() {
+class ProvisionedValetudoInstancesAdapter(
+    private val onItemClickListener: (DiscoveredValetudoInstance.Provisioned) -> Unit,
+    private val onItemLongClickListener: (DiscoveredValetudoInstance.Provisioned) -> Boolean
+) : RecyclerView.Adapter<ProvisionedValetudoInstancesAdapter.ViewHolder>() {
 
-    private val internalInstances = mutableListOf<DiscoveredValetudoInstance>()
+    private val internalInstances = mutableListOf<DiscoveredValetudoInstance.Provisioned>()
 
-    var instances: List<DiscoveredValetudoInstance>
+    var instances: List<DiscoveredValetudoInstance.Provisioned>
         get() = internalInstances.toList()
         set(value) {
             internalInstances.clear()
@@ -37,7 +38,7 @@ class DiscoveredValetudoInstancesAdapter(
 
     inner class ViewHolder(private val binding: DiscoveredInstanceListItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(instance: DiscoveredValetudoInstance) {
+        fun bind(instance: DiscoveredValetudoInstance.Provisioned) {
             itemView.setOnClickListener {
                 onItemClickListener(instance)
             }

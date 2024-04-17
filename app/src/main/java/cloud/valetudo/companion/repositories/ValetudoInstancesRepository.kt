@@ -3,7 +3,7 @@ package cloud.valetudo.companion.repositories
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
-import cloud.valetudo.companion.activities.main.DiscoveredValetudoInstance
+import cloud.valetudo.companion.data.DiscoveredValetudoInstance
 import cloud.valetudo.companion.services.NsdService
 import cloud.valetudo.companion.services.NsdService.DiscoveryEvent
 import kotlinx.coroutines.flow.map
@@ -25,7 +25,7 @@ class ValetudoInstancesRepository(
             }.map { services ->
                 services
                     .mapNotNull { service -> nsdService.resolveService(service) }
-                    .map { DiscoveredValetudoInstance.fromServiceInfo(it) }
+                    .map { DiscoveredValetudoInstance.Provisioned.fromServiceInfo(it) }
             }
 
     companion object {
@@ -54,4 +54,3 @@ class ValetudoInstancesRepository(
         }
     }
 }
-
