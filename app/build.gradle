@@ -9,9 +9,9 @@ android {
     defaultConfig {
         applicationId "cloud.valetudo.companion"
         minSdk 23
-        targetSdk 33
-        versionCode 13
-        versionName "2023.08.0"
+        targetSdk 34
+        versionCode 14
+        versionName "2024.04.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
