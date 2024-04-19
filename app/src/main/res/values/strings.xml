@@ -6,7 +6,7 @@
     <string name="discovered_valetudo_instance_list_item_manufacturer_and_model" translatable="false">%s %s</string>
     <string name="discovered_valetudo_instance_list_item_name" translatable="false">%s</string>
     <string name="discovered_valetudo_instance_list_item_valetudo_version" translatable="false">Valetudo %s</string>
-    <string name="discovered_valetudo_instance_list_item_domain_and_host" translatable="false">valetudo_%s.local (%s)</string>
+    <string name="discovered_valetudo_instance_list_item_domain_and_host" translatable="false">valetudo-%s.local (%s)</string>
     <string name="valetudo_logo_content_description">Valetudo Logo</string>
 
     <string name="help_button_title">Help</string>
