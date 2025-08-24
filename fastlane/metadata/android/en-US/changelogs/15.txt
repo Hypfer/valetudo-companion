@@ -1,0 +1,1 @@
+Updated targetSdk to 35 because google said so

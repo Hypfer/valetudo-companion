@@ -93,7 +93,8 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
                 it.SSID.startsWith("roborock-vacuum-") ||
                 it.SSID.startsWith("rockrobo-vacuum-") ||
                 it.SSID.startsWith("viomi-vacuum-") ||
-                it.SSID.startsWith("dreame-vacuum-")
+                it.SSID.startsWith("dreame-vacuum-") ||
+                it.SSID.startsWith("robot_")
             }
 
             runOnUiThread {
