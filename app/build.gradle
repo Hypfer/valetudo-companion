@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId "cloud.valetudo.companion"
         minSdk 23
-        targetSdk 35
+        targetSdk 36
         versionCode 15
         versionName "2025.08.0"
 
