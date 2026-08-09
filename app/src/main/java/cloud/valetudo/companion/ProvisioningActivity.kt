@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import kotlin.concurrent.thread
 
 
@@ -16,7 +18,14 @@ import kotlin.concurrent.thread
 class ProvisioningActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_provisioning)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.applyStatusBarTopInset()
+        setSupportActionBar(toolbar)
+
+        findViewById<LinearLayout>(R.id.provisioning_inputs).applyImeBottomMarginInset()
 
 
         var newNetworkId: Int? = null

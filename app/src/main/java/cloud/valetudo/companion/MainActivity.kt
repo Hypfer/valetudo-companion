@@ -13,8 +13,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.res.ResourcesCompat
@@ -33,7 +35,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.applyStatusBarTopInset()
+        setSupportActionBar(toolbar)
+
+        findViewById<FloatingActionButton>(R.id.enterProvisioningActivityButton)
+            .applySystemBarBottomMarginInset()
 
         val itemsAdapter = DiscoveredValetudoInstancesAdapter(this, R.layout.discovered_instance_list_item_layout, mValetudoInstances)
 

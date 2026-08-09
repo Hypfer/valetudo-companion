@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -23,7 +25,12 @@ const val PERMISSION_REQUEST_CODE = 1234;
 class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_provisioning_page1)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.applyStatusBarTopInset()
+        setSupportActionBar(toolbar)
 
         val wifiManager: WifiManager? = getSystemService(WifiManager::class.java)
         val connectivityManager: ConnectivityManager? = getSystemService(ConnectivityManager::class.java)
@@ -79,7 +86,7 @@ class ProvisioningWizardPageOneActivity: AppCompatActivity()  {
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String?>,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -14,6 +14,8 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.widget.Toolbar
 import android.net.Network
 import android.net.LinkProperties
 import android.net.NetworkCapabilities
@@ -55,6 +57,7 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Return to the previous activity if the user revoked the permission while we were in the background
@@ -66,6 +69,12 @@ class ProvisioningWizardPageTwoActivity: AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_provisioning_page2)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.applyStatusBarTopInset()
+        setSupportActionBar(toolbar)
+
+        findViewById<ListView>(R.id.wizard_page_2_wifi_network_list).applySystemBarBottomMarginInset()
 
         val helpText = findViewById<TextView>(R.id.no_ssids_found_hint)
 
